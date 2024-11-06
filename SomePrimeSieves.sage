@@ -42,7 +42,7 @@ def prime_sieve_2_hsmw(n):
     # Initialize the sieve
     n1 = n+1
     sieve = [True] * n1
-    sieve[0] = sieve[1] = False
+    sieve[0] = sieve[1] = False  # 0 and 1 are not prime
     sr = ceil(sqrt(n))
 
     # Mark non-primes divisible by 2 and 3
@@ -108,7 +108,8 @@ def prime_sieve_3_hsmw(n,s1=True,s2=True):
 def prime_sieve_4_hsmw(n):
     """ Returns a list of all prime numbers from 2 to n (inclusive) """
     """ Characteristics: Multiple times slower than the other ones (sieve 1-3), """ 
-    """                  but operates without setting any sieve element twice to "False" """
+    """                  but operates without setting any sieve element twice to "False", """
+    """                  by using a toggle that alternates the distance to the next non-primes """
     """ Warning: Your system might run out of memory and crash for inputs above 10^6 """
     
     if n < 2: return []
@@ -119,15 +120,21 @@ def prime_sieve_4_hsmw(n):
     sieve[0] = sieve[1] = False  # 0 and 1 are not prime
     sr = ceil(sqrt(n))
 
-    # Mark non-primes divisible by 2 and 3
-    for x in range(2, 4):
-        for i in range(x*x, n1, x):
-            sieve[i] = False
-       
+    # Mark non-primes divisible by 2 
+    # This equals the elements of residue classes [0],[2],[4] mod 6, starting from 4
+    for x in range(4, n1, 2):
+        sieve[x] = False
+    
+    # Mark non-primes divisible by 3 (but not by 2)
+    # This equals the elements of residue class [3] mod 6, starting from 9
+    for x in range(9, n1, 6):
+        sieve[x] = False
+
+    # Mark non-primes of residue class [5] mod 6, starting from 5
     for i in range(5, sr, 6):
         if sieve[i]:
             val = i * i
-            toggle = True # Start with 2*i
+            toggle = True  # Start with 2*i
             while val < n1:
                 sieve[val] = False
                 if toggle: 
@@ -136,6 +143,7 @@ def prime_sieve_4_hsmw(n):
                     val += 4 * i
                 toggle = not toggle  # Alternate between 2*i and 4*i
 
+    # Mark non-primes of residue class [1] mod 6, starting from 7
     for j in range(7, sr, 6):
         if sieve[j]:
             val = j * j
