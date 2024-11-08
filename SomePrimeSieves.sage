@@ -4,9 +4,9 @@
 # --------------------------------------------------------------------------------------------
 
 def prime_sieve_1_hsmw(n):
-    """ Returns a list of all prime numbers from 2 up to n (inclusive) """
-    """ Characteristics: A faster alternative to the sieve of eratosthenes """
-    """ Warning: Your execution environment might run out of memory and crash for inputs above 10^6 """
+    """ Returns a list of all prime numbers from 2 up to n (inclusive). """
+    """ Characteristics: A faster alternative to the sieve of eratosthenes. """
+    """ Warning: Your execution environment might run out of memory and crash for inputs above 10^6. """
     
     if n < 2: return []
 
@@ -37,10 +37,10 @@ def prime_sieve_1_hsmw(n):
 # --------------------------------------------------------------------------------------------
 
 def prime_sieve_2_hsmw(n):
-    """ Returns a list of all prime numbers from 2 up to n (inclusive) """
-    """ Characteristics: A faster alternative to the sieve of eratosthenes """
-    """ This is a slight variation to "sieve 1" with almost identical runtime """
-    """ Warning: Your execution environment might run out of memory and crash for inputs above 10^6 """
+    """ Returns a list of all prime numbers from 2 up to n (inclusive). """
+    """ Characteristics: A faster alternative to the sieve of eratosthenes. """
+    """ This is a slight variation to "sieve 1" with almost identical runtime. """
+    """ Warning: Your execution environment might run out of memory and crash for inputs above 10^6. """
     
     if n < 2: return []
 
@@ -77,11 +77,11 @@ def prime_sieve_2_hsmw(n):
 # --------------------------------------------------------------------------------------------
 
 def prime_sieve_3_hsmw(n, s1=True, s2=True):
-    """ Returns two complementary lists for prime numbers from 5 up to n (inclusive) """
-    """ Characteristics: Even faster than the other ones (sieve 1 & 2) due to the output format """
-    """ s1,s2: relates to the two sectors in which primes >= 5 can appear, more details in the code """
-    """        default values are "True", set one of them to "False" to turn one sector off """
-    """ Warning: Your execution environment might run out of memory and crash for inputs above 10^6 """
+    """ Returns two complementary lists for prime numbers from 5 up to n (inclusive). """
+    """ Characteristics: Even faster than the other ones (sieve 1 & 2) due to the output format. """
+    """ s1,s2: Relates to the two sectors in which primes >= 5 can appear; more details in the code. """
+    """        Default values are "True". Set one of them to "False" to turn one sector off. """
+    """ Warning: Your execution environment might run out of memory and crash for inputs above 10^6. """
     
     if n < 5: return
 
@@ -116,11 +116,11 @@ def prime_sieve_3_hsmw(n, s1=True, s2=True):
 # --------------------------------------------------------------------------------------------
 
 def prime_sieve_4_hsmw(n):
-    """ Returns a list of all prime numbers from 2 up to n (inclusive) """
+    """ Returns a list of all prime numbers from 2 up to n (inclusive). """
     """ Characteristics: Multiple times slower than the other ones (sieve 1-3), """ 
     """                  but operates without setting any sieve element twice to "False", """
-    """                  by using a toggle that alternates the distance to the next non-primes """
-    """ Warning: Your execution environment might run out of memory and crash for inputs above 10^6 """
+    """                  by using a pattern that alternates the distance to the next non-primes. """
+    """ Warning: Your execution environment might run out of memory and crash for inputs above 10^6. """
     
     if n < 2: return []
 
@@ -144,27 +144,23 @@ def prime_sieve_4_hsmw(n):
     for i in range(5, sr, 6):
         if sieve[i]:
             val = i^2
-            toggle = True  # Start with 2*i
-            while val < n1:
-                sieve[val] = False
-                if toggle: 
-                    val += 2*i
-                else: 
-                    val += 4*i
-                toggle = not toggle  # Alternate between 2*i and 4*i
+            while val < n1:  # Alternate between 2*i and 4*i
+                sieve[val] = False 
+                val += 2*i   # Start with 2*i
+                if val < n1:
+                    sieve[val] = False
+                val += 4*i
 
     # Mark non-primes of residue class [1] mod 6, starting from 7
     for j in range(7, sr, 6):
         if sieve[j]:
             val = j^2
-            toggle = False  # Start with 4*j
-            while val < n1:
-                sieve[val] = False
-                if toggle:
-                    val += 2*j
-                else:
-                    val += 4*j
-                toggle = not toggle  # Alternate between 4*j and 2*j 
+            while val < n1:  # Alternate between 4*j and 2*j 
+                sieve[val] = False 
+                val += 4*j   # Start with 4*j
+                if val < n1:
+                    sieve[val] = False
+                val += 2*j
 
     return [x for x in range(n1) if sieve[x]]
 
