@@ -144,7 +144,7 @@ def prime_sieve_4_hsmw(n):
     for i in range(5, sr, 6):
         if sieve[i]:
             val = i^2
-            while val < n1:  # Alternate between 2*i and 4*i
+            while val < n1:  # Alternate distance between 2*i and 4*i
                 sieve[val] = False 
                 val += 2*i   # Start with 2*i
                 if val < n1:
@@ -155,7 +155,7 @@ def prime_sieve_4_hsmw(n):
     for j in range(7, sr, 6):
         if sieve[j]:
             val = j^2
-            while val < n1:  # Alternate between 4*j and 2*j 
+            while val < n1:  # Alternate distance between 4*j and 2*j 
                 sieve[val] = False 
                 val += 4*j   # Start with 4*j
                 if val < n1:
