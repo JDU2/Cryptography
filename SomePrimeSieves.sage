@@ -5,7 +5,7 @@
 
 def prime_sieve_1_hsmw(n):
     """ Returns a list of all prime numbers from 2 up to n (inclusive). """
-    """ Characteristics: A faster alternative to the sieve of eratosthenes. """
+    """ Characteristics: A faster alternative to the optimized sieve of eratosthenes. """
     """ Warning: Your execution environment might run out of memory and crash for inputs above 10^6. """
     
     if n < 2: return []
@@ -38,7 +38,7 @@ def prime_sieve_1_hsmw(n):
 
 def prime_sieve_2_hsmw(n):
     """ Returns a list of all prime numbers from 2 up to n (inclusive). """
-    """ Characteristics: A faster alternative to the sieve of eratosthenes. """
+    """ Characteristics: A faster alternative to the optimized sieve of eratosthenes. """
     """ This is a slight variation to "sieve 1" with almost identical runtime. """
     """ Warning: Your execution environment might run out of memory and crash for inputs above 10^6. """
     
@@ -78,9 +78,9 @@ def prime_sieve_2_hsmw(n):
 
 def prime_sieve_3_hsmw(n, s1=True, s2=True):
     """ Returns two complementary lists for prime numbers from 5 up to n (inclusive). """
-    """ Characteristics: Even faster than the other ones (sieve 1 & 2) due to the output format. """
-    """ s1,s2: Relates to the two sectors in which primes >= 5 can appear; more details in the code. """
-    """        Default values are "True". Set one of them to "False" to turn one sector off. """
+    """ Characteristics: Even faster than sieve 1 & 2 due to the somewhat unusual output format. """
+    """ s1, s2: Relates to the two sectors in which primes >= 5 can appear; more details in the code. """
+    """         Default values are "True". Set one of them to "False" to turn one sector off. """
     """ Warning: Your execution environment might run out of memory and crash for inputs above 10^6. """
     
     if n < 5: return
@@ -117,8 +117,8 @@ def prime_sieve_3_hsmw(n, s1=True, s2=True):
 
 def prime_sieve_4_hsmw(n):
     """ Returns a list of all prime numbers from 2 up to n (inclusive). """
-    """ Characteristics: Multiple times slower than the other ones (sieve 1-3), """ 
-    """                  but operates without setting any sieve element twice to "False", """
+    """ Characteristics: Slower than the other three (sieve 1-3), """ 
+    """                  but operates without setting any sieve element more than once to "false", """
     """                  by using a pattern that alternates the distance to the next non-primes. """
     """ Warning: Your execution environment might run out of memory and crash for inputs above 10^6. """
     
@@ -144,23 +144,27 @@ def prime_sieve_4_hsmw(n):
     for i in range(5, sr, 6):
         if sieve[i]:
             val = i^2
+            small = 2*i
+            big = 4*i
             while val < n1:  # Alternate distance between 2*i and 4*i
                 sieve[val] = False 
-                val += 2*i   # Start with 2*i
+                val += small  # Start with 2*i
                 if val < n1:
                     sieve[val] = False
-                val += 4*i
+                val += big
 
     # Mark non-primes of residue class [1] mod 6, starting from 7
     for j in range(7, sr, 6):
         if sieve[j]:
             val = j^2
+            small = 2*j
+            big = 4*j
             while val < n1:  # Alternate distance between 4*j and 2*j 
                 sieve[val] = False 
-                val += 4*j   # Start with 4*j
+                val += big  # Start with 4*j
                 if val < n1:
                     sieve[val] = False
-                val += 2*j
+                val += small
 
     return [x for x in range(n1) if sieve[x]]
 
