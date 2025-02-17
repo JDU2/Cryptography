@@ -27,7 +27,7 @@ def prime_sieve_1_hsmw(n):
         sieve[x] = False
     
     # Mark non-primes starting from 5
-    for i in range(5, sr):
+    for i in range(5, sr, 2):
         if sieve[i]:
             for k in range(i^2, n1, 2*i):  
                 sieve[k] = False
