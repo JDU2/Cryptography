@@ -1,6 +1,5 @@
 ''' These are the sieves from https://github.com/JDU2/Cryptography/blob/main/Some_Prime_Sieves_.sage, '''
-''' that are now using bitarrays instead of (bit-)lists, '''
-''' which use less memory (in exchange for an increase in runtime) '''
+''' that are now using bitarrays instead of (bit-)lists, which use less memory '''
 ''' by JDU '''
 
 # ---------------------------------------------------------------------------------------------------------
@@ -22,34 +21,35 @@ def prime_sieve_1(n):
 
     # Initialize the sieve
     n1 = n+1
-    sieve = bitarray(n1)           # One extra bit (n+1) such that index 0 does represent integer 0
+    sieve = bitarray(n1)       # One extra bit (n+1) such that index 0 does represent integer 0
     sieve.setall(1)
-    sieve[0] = sieve[1] = False    # 0 and 1 are not prime
+    one = bitarray('1')        # Sub_bitarray of sieve
+    sieve[0] = sieve[1] = 0    # 0 and 1 are not prime
     sr = floor(sqrt(n))
     
     # Mark non-primes divisible by 2 
     # These are the elements of residue classes [0],[2],[4] mod 6, starting from 4
     for x in range(4, n1, 2):
-        sieve[x] = False
+        sieve[x] = 0
     
     # Mark non-primes divisible by 3 (but not by 2)
     # These are the elements of residue class [3] mod 6, starting from 9
     for x in range(9, n1, 6):
-        sieve[x] = False
+        sieve[x] = 0
 
     # Mark non-primes of residue class [5] mod 6, starting from 5
     for i in range(5, sr+1, 6):
         if sieve[i]:
             for x in range(i**2, n1, 2*i):  
-                sieve[x] = False
+                sieve[x] = 0
 
     # Mark non-primes of residue class [1] mod 6, starting from 7
     for j in range(7, sr+1, 6):
         if sieve[j]:
             for x in range(j**2, n1, 2*j):
-                sieve[x] = False
-
-    return [p for p in range(n1) if sieve[p]]
+                sieve[x] = 0
+    
+    return [p for p in sieve.search(one)]
 
 # ----------------------------------------------------------------------------------------------
 
@@ -64,36 +64,39 @@ def prime_sieve_2(n, s1=True, s2=True):
 
     # Initialize the sieve
     n1 = n+1
-    sieve = bitarray(n1)         # One extra bit (n+1) such that index 0 does represent integer 0
+    sieve = bitarray(n1)    # One extra bit (n+1) such that index 0 does represent integer 0
     sieve.setall(1)
+    one = bitarray('1')     # Sub_bitarray of sieve
     sr = floor(sqrt(n))
 
     # Any prime number >= 5 can only be in one of the following sectors
-    sector1 = range(5, n1, 6)    # elements of residue class [5] mod 6, starting from 5
-    sector2 = range(7, n1, 6)    # elements of residue class [1] mod 6, starting from 7
+    sector1 = range(5, n1, 6)     # Elements of residue class [5] mod 6, starting from 5
+    sector2 = range(7, n1, 6)     # Elements of residue class [1] mod 6, starting from 7
     
     if s1:
         # Mark non-primes of residue class [5] mod 6, starting from 5
         for i in range(5, sr+1, 6):
             if sieve[i]:
                 for x in range(i**2, n1, 2*i):  
-                    sieve[x] = False
+                    sieve[x] = 0
     
     if not s2: 
-        return [p for p in sector1 if sieve[p]]    # Returns only primes from sector 1
+        # Returns only primes from sector 1
+        return [p for p in sector1 if sieve[p]]
 
     if s2:
         # Mark non-primes of residue class [1] mod 6, starting from 7
         for j in range(7, sr+1, 6):
             if sieve[j]:
                 for x in range(j**2, n1, 2*j):
-                    sieve[x] = False
+                    sieve[x] = 0
 
-    if not s1: 
-        return [p for p in sector2 if sieve[p]]    # Returns only primes from sector 2
+    if not s1:
+        # Returns only primes from sector 2
+        return [p for p in sector2 if sieve[p]]    
 
     # Returns the primes from both sectors
-    return sorted([p for p in sector1 if sieve[p]] + [p for p in sector2 if sieve[p]])
+    return sorted([p for p in sieve.search(one)] + [p for p in sieve.search(one)]])
 
 # ----------------------------------------------------------------------------------------------
 
@@ -108,20 +111,21 @@ def prime_sieve_3(n):
 
     # Initialize the sieve
     n1 = n+1
-    sieve = bitarray(n1)           # One extra bit (n+1) such that index 0 does represent integer 0
+    sieve = bitarray(n1)       # One extra bit (n+1) such that index 0 does represent integer 0
     sieve.setall(1)
-    sieve[0] = sieve[1] = False    # 0 and 1 are not prime
+    one = bitarray('1')        # Sub_bitarray of sieve
+    sieve[0] = sieve[1] = 0    # 0 and 1 are not prime
     sr = floor(sqrt(n))
     
     # Mark non-primes divisible by 2 
     # These are the elements of residue classes [0],[2],[4] mod 6, starting from 4
     for x in range(4, n1, 2):
-        sieve[x] = False
+        sieve[x] = 0
     
     # Mark non-primes divisible by 3 (but not by 2)
     # These are the elements of residue class [3] mod 6, starting from 9
     for x in range(9, n1, 6):
-        sieve[x] = False
+        sieve[x] = 0
 
     # Mark non-primes of residue class [5] mod 6, starting from 5
     for i in range(5, sr+1, 6):
@@ -129,11 +133,11 @@ def prime_sieve_3(n):
             x = i**2
             small = 2*i
             big = 4*i
-            while x < n1:   # Alternate distance between 2*i and 4*i
-                sieve[x] = False 
+            while x < n1:    # Alternate distance between 2*i and 4*i
+                sieve[x] = 0 
                 x += small   # Start with 2*i
                 if x < n1:
-                    sieve[x] = False
+                    sieve[x] = 0
                 x += big
 
     # Mark non-primes of residue class [1] mod 6, starting from 7
@@ -143,12 +147,12 @@ def prime_sieve_3(n):
             small = 2*j
             big = 4*j
             while x < n1:   # Alternate distance between 4*j and 2*j 
-                sieve[x] = False 
-                x += big   # Start with 4*j
+                sieve[x] = 0 
+                x += big    # Start with 4*j
                 if x < n1:
-                    sieve[x] = False
+                    sieve[x] = 0
                 x += small
 
-    return [p for p in range(n1) if sieve[p]]
+    return [p for p in sieve.search(one)]
 
 # ----------------------------------------------------------------------------------------------
