@@ -1,13 +1,13 @@
-''' 3 Prime Sieves - For a better understanding of the distribution of primes'''
+''' 3 Prime Sieves - For a better understanding of the distribution of primes '''
 ''' by JDU '''
 
-# --------------------------------------------------------------------------------------------
+# ----------------------------------------------------------------------------------------------
 
 from sage.all import *      # For full sagemath functionality, you might need this import in 
                             # case your sagemath kernel did not properly initialize, which can 
                             # happen when working with jupyter notebook files within vs code
 
-# --------------------------------------------------------------------------------------------
+# ----------------------------------------------------------------------------------------------
 
 def prime_sieve_1(n):
     """ Returns a list of all prime numbers from 2 up to n (inclusive). """
@@ -46,11 +46,11 @@ def prime_sieve_1(n):
 
     return [p for p in range(n1) if sieve[p]]
 
-# --------------------------------------------------------------------------------------------
+# ----------------------------------------------------------------------------------------------
 
 def prime_sieve_2(n, s1=True, s2=True):
     """ Returns two complementary lists for prime numbers from 5 up to n (inclusive). """
-    """ Characteristics: Faster than sieve 1 as it does not consider primes 2 and 3 and their multiples. """
+    """ Characteristics: Faster than sieve 1 as it does not consider primes 2, 3, and their multiples. """
     """ s1, s2: Relates to the two sectors in which primes >= 5 can appear; more details in the code. """
     """         Default values are "True". Set one of them to "False" to turn one sector off. """
     """ Warning: Your execution environment might run out of memory and crash for inputs above 10^6. """
@@ -89,7 +89,7 @@ def prime_sieve_2(n, s1=True, s2=True):
     # Returns the primes from both sectors
     return sorted([p for p in sector1 if sieve[p]] + [p for p in sector2 if sieve[p]])
 
-# --------------------------------------------------------------------------------------------
+# ----------------------------------------------------------------------------------------------
 
 def prime_sieve_3(n):
     """ Returns a list of all prime numbers from 2 up to n (inclusive). """
@@ -144,4 +144,4 @@ def prime_sieve_3(n):
 
     return [p for p in range(n1) if sieve[p]]
 
-# --------------------------------------------------------------------------------------------
+# ----------------------------------------------------------------------------------------------
