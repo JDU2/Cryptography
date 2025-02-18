@@ -1,5 +1,5 @@
-'''Message Encoding And Decoding Functions'''
-'''by JDU'''
+''' Message Encoding And Decoding Functions '''
+''' by JDU '''
 
 # ----------------------------------------------------------------------------------------------------
 
