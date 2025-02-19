@@ -21,33 +21,28 @@ def prime_sieve_1(n):
 
     # Initialize the sieve
     n1 = n+1
-    sieve = bitarray(n1)       # One extra bit (n+1) such that index 0 does represent integer 0
-    sieve.setall(1)
-    one = bitarray('1')        # Sub_bitarray of sieve
-    sieve[0] = sieve[1] = 0    # 0 and 1 are not prime
+    sieve = bitarray(n1 * '1')    # One extra bit (n+1) such that index 0 does represent integer 0
+    one = bitarray('1')           # Sub_bitarray of sieve
+    sieve[range(2)] = 0           # 0 and 1 are not prime
     sr = floor(sqrt(n))
     
     # Mark non-primes divisible by 2 
     # These are the elements of residue classes [0],[2],[4] mod 6, starting from 4
-    for x in range(4, n1, 2):
-        sieve[x] = 0
+    sieve[range(4, n1, 2)] = 0
     
     # Mark non-primes divisible by 3 (but not by 2)
     # These are the elements of residue class [3] mod 6, starting from 9
-    for x in range(9, n1, 6):
-        sieve[x] = 0
+    sieve[range(9, n1, 6)] = 0
 
     # Mark non-primes of residue class [5] mod 6, starting from 5
     for i in range(5, sr+1, 6):
         if sieve[i]:
-            for x in range(i**2, n1, 2*i):  
-                sieve[x] = 0
+            sieve[range(i**2, n1, 2*i)] = 0
 
     # Mark non-primes of residue class [1] mod 6, starting from 7
     for j in range(7, sr+1, 6):
         if sieve[j]:
-            for x in range(j**2, n1, 2*j):
-                sieve[x] = 0
+            sieve[range(j**2, n1, 2*j)] = 0
     
     return [p for p in sieve.search(one)]
 
@@ -64,9 +59,7 @@ def prime_sieve_2(n, s1=True, s2=True):
 
     # Initialize the sieve
     n1 = n+1
-    sieve = bitarray(n1)    # One extra bit (n+1) such that index 0 does represent integer 0
-    sieve.setall(1)
-    one = bitarray('1')     # Sub_bitarray of sieve
+    sieve = bitarray(n1 * '1')    # One extra bit (n+1) such that index 0 does represent integer 0
     sr = floor(sqrt(n))
 
     # Any prime number >= 5 can only be in one of the following sectors
@@ -77,8 +70,7 @@ def prime_sieve_2(n, s1=True, s2=True):
         # Mark non-primes of residue class [5] mod 6, starting from 5
         for i in range(5, sr+1, 6):
             if sieve[i]:
-                for x in range(i**2, n1, 2*i):  
-                    sieve[x] = 0
+                sieve[range(i**2, n1, 2*i)] = 0
     
     if not s2: 
         # Returns only primes from sector 1
@@ -88,15 +80,14 @@ def prime_sieve_2(n, s1=True, s2=True):
         # Mark non-primes of residue class [1] mod 6, starting from 7
         for j in range(7, sr+1, 6):
             if sieve[j]:
-                for x in range(j**2, n1, 2*j):
-                    sieve[x] = 0
+                sieve[range(j**2, n1, 2*j)] = 0
 
     if not s1:
         # Returns only primes from sector 2
         return [p for p in sector2 if sieve[p]]    
 
     # Returns the primes from both sectors
-    return sorted([p for p in sieve.search(one)] + [p for p in sieve.search(one)]])
+    return sorted([p for p in sector1 if sieve[p]] + [p for p in sector2 if sieve[p]])
 
 # ----------------------------------------------------------------------------------------------
 
@@ -111,21 +102,18 @@ def prime_sieve_3(n):
 
     # Initialize the sieve
     n1 = n+1
-    sieve = bitarray(n1)       # One extra bit (n+1) such that index 0 does represent integer 0
-    sieve.setall(1)
-    one = bitarray('1')        # Sub_bitarray of sieve
-    sieve[0] = sieve[1] = 0    # 0 and 1 are not prime
+    sieve = bitarray(n1 * '1')    # One extra bit (n+1) such that index 0 does represent integer 0
+    one = bitarray('1')           # Sub_bitarray of sieve
+    sieve[range(2)] = 0           # 0 and 1 are not prime
     sr = floor(sqrt(n))
     
     # Mark non-primes divisible by 2 
     # These are the elements of residue classes [0],[2],[4] mod 6, starting from 4
-    for x in range(4, n1, 2):
-        sieve[x] = 0
+    sieve[range(4, n1, 2)] = 0
     
     # Mark non-primes divisible by 3 (but not by 2)
     # These are the elements of residue class [3] mod 6, starting from 9
-    for x in range(9, n1, 6):
-        sieve[x] = 0
+    sieve[range(9, n1, 6)] = 0
 
     # Mark non-primes of residue class [5] mod 6, starting from 5
     for i in range(5, sr+1, 6):
