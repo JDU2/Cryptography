@@ -1,11 +1,11 @@
-''' These are the sieves from https://github.com/JDU2/Cryptography/blob/main/Some_Prime_Sieves_.sage, '''
+''' These are the sieves from https://github.com/JDU2/Cryptography/blob/main/somePrimeSieves.sage, '''
 ''' that are now using bitarrays instead of (bit-)lists, which use less memory '''
 ''' by JDU '''
 
 # ---------------------------------------------------------------------------------------------------------
 
-from sage.all import *            # For full sagemath functionality, you might need this import in 
-                                  # case your sagemath kernel did not properly initialize, which can 
+from sage.all import *            # For full sagemath functionality you might need this import in 
+                                  # case your sagemath kernel did not initialize properly, which can 
                                   # happen when working with jupyter notebook files within vs code
 
 from bitarray import bitarray     # install this library before import: https://pypi.org/project/bitarray/
