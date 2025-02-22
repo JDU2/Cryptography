@@ -13,7 +13,7 @@ def prime_sieve_1(n):
     """ Characteristics: A faster alternative to the optimized sieve of eratosthenes. """
     """ Warning: Your execution environment might run out of memory and crash for inputs above 10^9. """
 
-    if not (isinstance(n, (int, Integer)):
+    if not isinstance(n, (int, Integer)):
         raise TypeError("Input (n) must be an integer!")
     
     if n < 2: return []
@@ -53,7 +53,7 @@ def prime_sieve_2(n, s1=True, s2=True):
     """         Default values are "True". Set one of them to "False" to turn one sector off. """
     """ Warning: Your execution environment might run out of memory and crash for inputs above 10^9. """
 
-    if not (isinstance(n, (int, Integer)):
+    if not isinstance(n, (int, Integer)):
         raise TypeError("Input (n) must be an integer!")
 
     if n < 5 or (not s1 and not s2): return []
@@ -99,7 +99,7 @@ def prime_sieve_3(n):
     """                  by using a pattern that alternates the distance to the next non-primes. """
     """ Warning: Your execution environment might run out of memory and crash for inputs above 10^9. """
 
-    if not (isinstance(n, (int, Integer)):
+    if not isinstance(n, (int, Integer)):
         raise TypeError("Input (n) must be an integer!")
 
     if n < 2: return []
