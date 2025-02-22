@@ -4,9 +4,9 @@
 
 # ---------------------------------------------------------------------------------------------------------
 
-from sage.all import *      # See Cryptography/README.md 
+from sage.all import *             # See Cryptography/README.md 
 
-import bitarray             # install this library before import: https://pypi.org/project/bitarray/
+from bitarray import bitarray      # install this library before import: https://pypi.org/project/bitarray/
 
 # ---------------------------------------------------------------------------------------------------------
 
@@ -14,7 +14,10 @@ def prime_sieve_1(n):
     """ Returns a list of all prime numbers from 2 up to n (inclusive). """
     """ Characteristics: A faster alternative to the optimized sieve of eratosthenes. """
     """ Warning: Your execution environment might run out of memory and crash for inputs above 10^9. """
-    
+
+    if not (isinstance(n, (int, Integer)):
+        raise TypeError("Input (n) must be an integer!")
+
     if n < 2: return []
 
     # Initialize the sieve
@@ -52,7 +55,10 @@ def prime_sieve_2(n, s1=True, s2=True):
     """ s1, s2: Relates to the two sectors in which primes >= 5 can appear; more details in the code. """
     """         Default values are "True". Set one of them to "False" to turn one sector off. """
     """ Warning: Your execution environment might run out of memory and crash for inputs above 10^9. """
-    
+
+    if not (isinstance(n, (int, Integer)):
+        raise TypeError("Input (n) must be an integer!")
+
     if n < 5 or (not s1 and not s2): return []
 
     # Initialize the sieve
@@ -95,7 +101,10 @@ def prime_sieve_3(n):
     """                  but operates without setting any sieve element more than once to "false", """
     """                  by using a pattern that alternates the distance to the next non-primes. """
     """ Warning: Your execution environment might run out of memory and crash for inputs above 10^9. """
-    
+
+    if not (isinstance(n, (int, Integer)):
+        raise TypeError("Input (n) must be an integer!")
+
     if n < 2: return []
 
     # Initialize the sieve
