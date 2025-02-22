@@ -6,8 +6,6 @@
 
 from sage.all import *            # See Cryptography/README.md
 
-from bitarray import bitarray     # install this library before import: https://pypi.org/project/bitarray/
-
 # ---------------------------------------------------------------------------------------------------------
 
 def prime_sieve_1(n):
