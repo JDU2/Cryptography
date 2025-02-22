@@ -3,9 +3,7 @@
 
 # ----------------------------------------------------------------------------------------------
 
-from sage.all import *      # For full sagemath functionality you might need this import in 
-                            # case your sagemath kernel did not initialize properly, which can 
-                            # happen when working with jupyter notebook files within vs code
+from sage.all import *      # See Cryptography/README.md 
 
 # ----------------------------------------------------------------------------------------------
 
