@@ -14,24 +14,43 @@ def primalityTest_1(n, itr):
     """       primality (in %) and the max amount of iterations required to determine guaranteed primality for (n). """
     """ Warning: This method gets very slow for (itr) above 10^7. """
 
-    # Test prime factors 2 and 3
+    if (not isinstance(n, (int, Integer)) 
+        or not isinstance(itr, (int, Integer))):
+            raise TypeError("Inputs (n, itr) must be integers")
+
+    if n < 2:
+        raise ValueError("Input (n) must be >= 2")
+
+    if itr < 1:
+        raise ValueError("Input (itr) must be >= 1")
+
+    if n <= 3:
+        return True
+
+    # Test prime factors 2 and 3    
     if (not n % 2) or (not n % 3): 
         return False
-
+     
     itrLimit = itr      
     sr = floor(sqrt(n))
     max_itr = ((sr-1)//6)+1
+    
+    # Adjustments for least possible iterations
+    if (sr % 6) != 5: max_itr -= 1  
+    if (sr % 6) != 1: sr += 1
 
     # Test all other potential prime factors
-    for i in range(7, sr, 6):
-        if (not n % i) or (not n % (i-2)): 
+    for i in range(5, sr, 6):
+        if (not n % i) or (not n % (i+2)):
             return False
         itr -= 1
         if not itr:
-            certainty = (1+itrLimit*6)*100/float(sr)
-            print(f"Result: Input (n) is possibly prime! ... Certainty: {certainty:.18f} % ... Increase (itr) for more certainty!")
+            if max_itr == itrLimit:
+                break
+            certainty = itrLimit*100/float(max_itr)
+            print(f"Result: Input (n) is possibly prime! ... Certainty: {certainty:.18f} % ... Increase (itr) for more certainty!\n")
             print(f"Note: This method requires {max_itr} iterations for 100% certainty, if (n) is prime.\n")
-            return
+            return None
  
     return True
 
@@ -47,30 +66,37 @@ def primalityTest_2(n, itr):
     """       primality (in %) and the max amount of iterations required to determine guaranteed primality for (n). """
     """ Warning: This method gets very slow for (itr) above 10^6. """
 
+    if (not isinstance(n, (int, Integer)) 
+        or not isinstance(itr, (int, Integer))):
+            raise TypeError("Inputs (n, itr) must be integers")
+
+    if n < 2:
+        raise ValueError("Input (n) must be >= 2")
+
+    if itr < 1:
+        raise ValueError("Input (itr) must be >= 1")
+
     itrLimit = itr      
     sr = floor(sqrt(n))
 
-    if sr < 3:
+    if sr < 2:
         max_nop = 1
     else:
-        a = previous_prime(sr)
-        max_nop = prime_pi(a)   # Maximum number of primes to test
-        if is_prime(sr): 
-            max_nop += 1
-
+        a = previous_prime(sr+1)
+        max_nop = prime_pi(a)     # Max number of primes to test
 
     # Test all potential prime factors
-    for i in primes(sr):
-        if not n % i: 
+    for i in primes(sr+1):
+        if (n % i) == 0: 
             return False
         itr -= 1
-        if not itr:
-            if max_nop == itrLimit:   # Special case
-                return True
+        if itr == 0:
+            if max_nop == itrLimit:
+                break
             certainty = (itrLimit-itr)*100/float(max_nop)
             print(f"Result: Input (n) is possibly prime! ... Certainty: {certainty:.18f} % ... Increase (itr) for more certainty!")
             print(f"Note: This method requires {max_nop} iterations for 100% certainty, if (n) is prime.\n")
-            return
+            return None
  
     return True
 
