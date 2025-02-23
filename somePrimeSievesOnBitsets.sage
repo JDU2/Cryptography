@@ -56,6 +56,12 @@ def prime_sieve_2(n, s1=True, s2=True):
     if not isinstance(n, (int, Integer)):
         raise TypeError("Input (n) must be an integer!")
 
+    if not isinstance(s1, bool):
+        raise TypeError("Input (s1) must be a boolean!")
+    
+    if not isinstance(s2, bool):
+        raise TypeError("Input (s2) must be a boolean!")
+
     if n < 5 or (not s1 and not s2): return []
 
     # Initialize the sieve
