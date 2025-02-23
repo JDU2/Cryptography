@@ -14,8 +14,7 @@ def primalityTest_1(n, itr):
     """       primality (in %) and the max amount of iterations required to determine guaranteed primality for (n). """
     """ Warning: This method gets very slow for (itr) above 10^7. """
 
-    if (not isinstance(n, (int, Integer)) 
-        or not isinstance(itr, (int, Integer))):
+    if not isinstance(n, (int, Integer)) or not isinstance(itr, (int, Integer)):
             raise TypeError("Inputs (n, itr) must be integers")
 
     if n < 2: raise ValueError("Input (n) must be >= 2")
@@ -38,12 +37,9 @@ def primalityTest_1(n, itr):
 
     # Test all other potential prime factors
     for i in range(5, sr, 6):
-
         if ((n % i) == 0) or (n % (i+2) == 0):
             return False
-        
         itr -= 1
-        
         if itr == 0:
             if max_itr == itrLimit:
                 break
@@ -66,8 +62,7 @@ def primalityTest_2(n, itr):
     """       primality (in %) and the max amount of iterations required to determine guaranteed primality for (n). """
     """ Warning: This method gets very slow for (itr) above 10^6. """
 
-    if (not isinstance(n, (int, Integer)) 
-        or not isinstance(itr, (int, Integer))):
+    if not isinstance(n, (int, Integer)) or not isinstance(itr, (int, Integer)):
             raise TypeError("Inputs (n, itr) must be integers")
 
     if n < 2: raise ValueError("Input (n) must be >= 2")
@@ -85,12 +80,9 @@ def primalityTest_2(n, itr):
 
     # Test all potential prime factors
     for i in primes(sr+1):
-
         if (n % i) == 0: 
             return False
-        
         itr -= 1
-        
         if itr == 0:
             if max_nop == itrLimit:
                 break
