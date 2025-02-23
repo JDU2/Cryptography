@@ -18,14 +18,11 @@ def primalityTest_1(n, itr):
         or not isinstance(itr, (int, Integer))):
             raise TypeError("Inputs (n, itr) must be integers")
 
-    if n < 2:
-        raise ValueError("Input (n) must be >= 2")
+    if n < 2: raise ValueError("Input (n) must be >= 2")
 
-    if itr < 1:
-        raise ValueError("Input (itr) must be >= 1")
+    if itr < 1: raise ValueError("Input (itr) must be >= 1")
 
-    if n <= 3:
-        return True
+    if n <= 3: return True
 
     # Test prime factors 2 and 3    
     if (not n % 2) or (not n % 3): 
@@ -41,9 +38,12 @@ def primalityTest_1(n, itr):
 
     # Test all other potential prime factors
     for i in range(5, sr, 6):
+
         if ((n % i) == 0) or (n % (i+2) == 0):
             return False
+        
         itr -= 1
+        
         if itr == 0:
             if max_itr == itrLimit:
                 break
@@ -70,11 +70,9 @@ def primalityTest_2(n, itr):
         or not isinstance(itr, (int, Integer))):
             raise TypeError("Inputs (n, itr) must be integers")
 
-    if n < 2:
-        raise ValueError("Input (n) must be >= 2")
+    if n < 2: raise ValueError("Input (n) must be >= 2")
 
-    if itr < 1:
-        raise ValueError("Input (itr) must be >= 1")
+    if itr < 1: raise ValueError("Input (itr) must be >= 1")
 
     itrLimit = itr      
     sr = floor(sqrt(n))
@@ -82,14 +80,17 @@ def primalityTest_2(n, itr):
     if sr < 2:
         max_nop = 1
     else:
-        a = previous_prime(sr+1)
-        max_nop = prime_pi(a)     # Max number of primes to test
+        # Max number of primes to test
+        max_nop = prime_pi(previous_prime(sr+1))     
 
     # Test all potential prime factors
     for i in primes(sr+1):
+
         if (n % i) == 0: 
             return False
+        
         itr -= 1
+        
         if itr == 0:
             if max_nop == itrLimit:
                 break
