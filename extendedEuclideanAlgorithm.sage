@@ -8,10 +8,10 @@ from sage.all import *    # See Cryptography/README.md
 # -------------------------------------------------------------------------------------------------------------------
 
 def xgcd(a, b):
-    """ Returns the greatest common divisor of two integers (a) and (b), and the Bézout coefficients a' and b' """
+    """ Returns the greatest common divisor and the bézout coefficients a' and b' of two integers (a) and (b). """
     """ Bézout's identity formula:  a' * a + b' * b = gcd(a, b) """
-    """                             where:  a' is the modular inverse of a (mod b) """
-    """                             and:    b' is the modular inverse of b (mod a) """
+    """                     where:  a' is the modular inverse of a (mod b) """
+    """                       and:  b' is the modular inverse of b (mod a) """
 
     if not isinstance(a, (int, Integer)):
         raise TypeError("Input (a) must be an integer!")
