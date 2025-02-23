@@ -76,7 +76,7 @@ def str2num_Alt(s, supported = myDefaultChars):
 
 def num2str(n, supported = myDefaultChars):
     """ Decodes an integer (n) back to a string. """
-    """ Note: To ensure compatability with your str2num() function, they """
+    """ Note: To ensure compatibility with your str2num() function, they """
     """       both must use the exact same input value for "supported". """
     
     if not isinstance(n, (int, Integer)):
@@ -99,7 +99,7 @@ def num2str_Alt(n, supported = myDefaultChars):
 
     """ Decodes an integer (n) back to a string. """
     """ This is an alternative implementation of num2str(). """
-    """ Note: To ensure compatability with your str2num() function, they """
+    """ Note: To ensure compatibility with your str2num() function, they """
     """       both must use the exact same input value for "supported". """
 
     if not isinstance(n, (int, Integer)):
