@@ -14,6 +14,12 @@ myDefaultChars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz
 def str2num(s, supported = myDefaultChars):
     """ Encodes a string (s) to a positive integer if its characters are supported. """
     
+    if not isinstance(s, str):
+        raise TypeError("Input (s) must be a string!")
+
+    if not isinstance(supported, str):
+        raise TypeError("Input (supported) must be a string!")
+
     listDigits, skipped = [], []
 
     for c in s:
@@ -36,9 +42,16 @@ def str2num(s, supported = myDefaultChars):
 
 # ----------------------------------------------------------------------------------------------------
 
+
 def str2num_Alt(s, supported = myDefaultChars):
-    """ Alternative implementation of str2num(). """
     """ Encodes a string (s) to a positive integer if its characters are supported. """
+    """ This is an alternative implementation of str2num(). """
+
+    if not isinstance(s, str):
+        raise TypeError("Input (s) must be a string!")
+
+    if not isinstance(supported, str):
+        raise TypeError("Input (supported) must be a string!")
 
     n, base, weight, skipped = 0, len(supported), 1, []
 
@@ -63,8 +76,15 @@ def str2num_Alt(s, supported = myDefaultChars):
 
 def num2str(n, supported = myDefaultChars):
     """ Decodes an integer (n) back to a string. """
-    """ Note: To ensure compatability with your str2num() function they both must use the exact same input value for "supported". """
+    """ Note: To ensure compatability with your str2num() function, they """
+    """       both must use the exact same input value for "supported". """
     
+    if not isinstance(n, (int, Integer)):
+        raise TypeError("Input (n) must be an integer!")
+    
+    if not isinstance(supported, str):
+        raise TypeError("Input (supported) must be a string!")
+
     # reads in the digits of (n) according to our given base
     listDigits = n.digits(len(supported))
 
@@ -76,9 +96,17 @@ def num2str(n, supported = myDefaultChars):
 # ----------------------------------------------------------------------------------------------------
 
 def num2str_Alt(n, supported = myDefaultChars):
-    """ Alternative implementation of num2str(). """
+
     """ Decodes an integer (n) back to a string. """
-    """ Note: To ensure compatability with your str2num() function they both must use the exact same input value for "supported". """
+    """ This is an alternative implementation of num2str(). """
+    """ Note: To ensure compatability with your str2num() function, they """
+    """       both must use the exact same input value for "supported". """
+
+    if not isinstance(n, (int, Integer)):
+        raise TypeError("Input (n) must be an integer!")
+    
+    if not isinstance(supported, str):
+        raise TypeError("Input (supported) must be a string!")
 
     s = ""
     base = len(supported)
@@ -91,4 +119,3 @@ def num2str_Alt(n, supported = myDefaultChars):
     return s[::-1]
 
 # ----------------------------------------------------------------------------------------------------
-
