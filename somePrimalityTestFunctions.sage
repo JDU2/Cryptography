@@ -41,10 +41,10 @@ def primalityTest_1(n, itr):
 
     # Test all other potential prime factors
     for i in range(5, sr, 6):
-        if (not n % i) or (not n % (i+2)):
+        if ((n % i) == 0) or (n % (i+2) == 0):
             return False
         itr -= 1
-        if not itr:
+        if itr == 0:
             if max_itr == itrLimit:
                 break
             certainty = itrLimit*100/float(max_itr)
