@@ -27,10 +27,12 @@ def xgcd(a, b):
     q = a // b  # Quotient
     r = a % b   # Remainder
     
-    # Recursive downwards propagation 
+    # Recursive downwards propagation until b == 0
+    # Then recursive variable assignment from upwards propagation
     d, b_star, r_star = xgcd(b, r)
     
-    # Renaning (optional) and recursive updating of values
+    # Recursive updating of values
+    # (Renaning of return values is optional)
     gcd_ab = d
     a_prime = r_star
     b_prime = b_star - q * r_star
