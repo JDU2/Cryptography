@@ -17,9 +17,9 @@ def primalityTest_1(n, itr):
     if not isinstance(n, (int, Integer)) or not isinstance(itr, (int, Integer)):
         raise TypeError("Inputs (n, itr) must be integers!")
 
-    if n < 2: raise ValueError("Input (n) must be >= 2")
-
     if itr < 1: raise ValueError("Input (itr) must be >= 1")
+
+    if n < 2: return False
 
     if n <= 3: return True
 
@@ -66,9 +66,9 @@ def primalityTest_2(n, itr):
     if not isinstance(n, (int, Integer)) or not isinstance(itr, (int, Integer)):
         raise TypeError("Inputs (n, itr) must be integers!")
 
-    if n < 2: raise ValueError("Input (n) must be >= 2")
-
     if itr < 1: raise ValueError("Input (itr) must be >= 1")
+
+    if n < 2: return False
 
     itrLimit = itr      
     sr = floor(sqrt(n))
