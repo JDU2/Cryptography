@@ -41,7 +41,8 @@ def primalityTest_1(n, itr):
             return False
         itr -= 1
         if itr == 0:
-            if max_itr == itrLimit:
+            if itrLimit == max_itr:
+                # Special case
                 break
             certainty = itrLimit*100/float(max_itr)
             print(f"Result: Input (n) is possibly prime! ... Certainty: {certainty:.18f} % ... Increase (itr) for more certainty!\n")
@@ -65,26 +66,27 @@ def primalityTest_2(n, itr):
     if not isinstance(n, (int, Integer)) or not isinstance(itr, (int, Integer)):
             raise TypeError("Inputs (n, itr) must be integers")
 
-    if (n < 2): raise ValueError("Input (n) must be >= 2")
+    if n < 2: raise ValueError("Input (n) must be >= 2")
 
-    if (itr < 1): raise ValueError("Input (itr) must be >= 1")
+    if itr < 1: raise ValueError("Input (itr) must be >= 1")
 
     itrLimit = itr      
     sr = floor(sqrt(n))
 
-    if (sr < 2):
-        max_nop = 1
-    else:
+    if sr >= 2:
         # Max number of primes to test
-        max_nop = prime_pi(previous_prime(sr+1))     
+        max_nop = prime_pi(previous_prime(sr+1))
+    else:
+        max_nop = 1
 
     # Test all potential prime factors
     for i in primes(sr+1):
-        if (n % i == 0): 
+        if n % i == 0: 
             return False
         itr -= 1
-        if (itr == 0):
-            if (max_nop == itrLimit):
+        if itr == 0:
+            if itrLimit == max_nop:
+                # Special case
                 break
             certainty = (itrLimit-itr)*100/float(max_nop)
             print(f"Result: Input (n) is possibly prime! ... Certainty: {certainty:.18f} % ... Increase (itr) for more certainty!")
