@@ -56,7 +56,7 @@ def primalityTest_1(n, itr):
 def primalityTest_2(n, itr):
     """ Tests whether an integer (n) is a prime number, for (itr) iterations. """
     """ Characteristics: This is an alternative approach which is at least in theory more efficient, as it only tests  """
-    """                  real prime numbers aspotential factors of (n), in contrast to primalityTest_1(), which also  """
+    """                  real prime numbers as potential factors of (n), in contrast to primalityTest_1(), which also  """
     """                  tests certain composites besides primes. However, the reliance on prime counting tools makes  """
     """                  it overall slower than primalityTest_1(), despite using less iterations. """
     """ Note: If the given integer for iterations (itr) is not sufficient, it prints out the certainty level of """
