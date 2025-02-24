@@ -15,7 +15,7 @@ def primalityTest_1(n, itr):
     """ Warning: This method gets very slow for (itr) above 10^7. """
 
     if not isinstance(n, (int, Integer)) or not isinstance(itr, (int, Integer)):
-        raise TypeError("Inputs (n, itr) must be integers")
+        raise TypeError("Inputs (n, itr) must be integers!")
 
     if n < 2: raise ValueError("Input (n) must be >= 2")
 
@@ -64,7 +64,7 @@ def primalityTest_2(n, itr):
     """ Warning: This method gets very slow for (itr) above 10^6. """
 
     if not isinstance(n, (int, Integer)) or not isinstance(itr, (int, Integer)):
-        raise TypeError("Inputs (n, itr) must be integers")
+        raise TypeError("Inputs (n, itr) must be integers!")
 
     if n < 2: raise ValueError("Input (n) must be >= 2")
 
