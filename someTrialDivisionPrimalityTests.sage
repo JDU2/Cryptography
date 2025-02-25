@@ -1,4 +1,4 @@
-''' 2 Primality Test Functions '''
+''' 2 primality tests based on optimized trial division '''
 ''' by JDU '''
 
 # ------------------------------------------------------------------------------------------------------------
@@ -9,10 +9,10 @@ from sage.all import *    # See Cryptography/README.md
 
 def primalityTest_1(n, itr):
     """ Tests whether an integer (n) is a prime number, for (itr) iterations. """
-    """ Characteristics: A simple approach without the reliance on prime number tools. """
+    """ Characteristics: A simple optimized approach without the reliance on prime number tools. """
     """ Note: If the given integer for iterations (itr) is not sufficient, it prints out the certainty level of """
     """       primality (in %) and the max amount of iterations required to determine guaranteed primality for (n). """
-    """ Warning: This method gets very slow for (itr) above 10^7. """
+    """ Warning: This method gets very slow for (itr) above 10^7 (required for primes > 3.6 x 10^15). """
 
     if not isinstance(n, (int, Integer)) or not isinstance(itr, (int, Integer)):
         raise TypeError("Inputs (n, itr) must be integers!")
