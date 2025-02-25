@@ -12,7 +12,7 @@ def fermatsPrimalityTest(n, itr = 50):
     """ The probabilitiy of this function to return a false "true" is approximately 1/(2^itr), with disregard to carmichael numbers."""
     """ Note: If (n) is a so-called carmichael number, this test will always return "true" despite (n) being composite. """
     """       Therefore you should use fermat's primality test in combination with a deterministic primality test, that tests the """
-    """       range of potential carmichael factors from 2 to n^(1/3), or choose a more robust probabilistic test (Miller-Rabin). """
+    """       range of potential carmichael factors from 3 to n^(1/3), or choose a more robust probabilistic test (Miller-Rabin). """
 
     if not isinstance(n, (int, Integer)) or not isinstance(itr, (int, Integer)):
         raise TypeError("Inputs (n, itr) must be integers!")
