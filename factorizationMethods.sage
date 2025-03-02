@@ -21,10 +21,12 @@ def fermatsFactorization(n, itr = 10**6):
     if not isinstance(n, (int, Integer)) or not isinstance(itr, (int, Integer)):
         raise TypeError("Inputs (n, itr) must be integers!")
 
-    if itr < 1: raise ValueError("Input (itr) must be >= 1")
+    if itr < 1: 
+        raise ValueError("Input (itr) must be >= 1")
 
     if n <= 3:
-        if n == 2 or n == 3: print("Input (n) is a prime number!")
+        if n == 2 or n == 3: 
+            print("Input (n) is a prime number!")
         return False
 
     if n % 2 == 0: return n//2, 2
