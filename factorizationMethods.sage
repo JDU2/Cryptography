@@ -1,4 +1,4 @@
-''' Factorization methods - Fermat's and Pollard's '''
+''' Factorization methods - Pollard's rho, Pollard's (p-1), Fermat's '''
 ''' by JDU '''
 
 # ----------------------------------------------------------------------------------------------------
@@ -8,10 +8,11 @@ from sage.all import *      # See Cryptography/README.md
 # ----------------------------------------------------------------------------------------------------
 
 def fermatsFactorization(n, itr = 10**6):
-    """ Returns two non-trivial factors (a) and (b) of integer (n) after a maximum of (itr) iterations or "false". """
+    """ Returns two non-trivial factors (a) and (b) of integer (n) after performing at most (itr) iterations or "false". """
     """ Fermat's formula:     n = ab = (t+s)(t-s) = t²-s² """
-    """ Characteristics: Optimized step size by sorting out prime factors 2 and 3. (If you prefer a simpler variant of this code, """
-    """                  then just sort out prime factor 2 and use a step size of 2 instead, which does not rely on mod 6 analysis) """
+    """ Characteristics: Optimized step size by sorting out prime factors 2 and 3. """
+    """                  If you prefer a simpler implementation, then just sort out prime """
+    """                  factor 2 and use a step size of 2, which does not rely on mod 6 analysis. """
     """ Note: Non-trivial factors do exclude 1 and itself (n). """
     """       If (n) is composite, then (b) is its smallest possible prime factor. """
     """       Prints the maximum number of iterations required for a definite """
