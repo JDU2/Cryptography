@@ -26,14 +26,14 @@ def fermatsFactorization(n, itr = 10**6):
 
     if n <= 3:
         if n == 2 or n == 3: 
-            print("Input (n) is a prime number!")
+            print(f"Input ({n}) is a prime number!")
         return False
 
     if n % 2 == 0: return n//2, 2
     if n % 3 == 0: return n//3, 3
 
     if is_square(n): 
-        print("Input (n) is a square value!")
+        print(f"Input ({n}) is a square value!")
         return False
 
     # Initial values for t and s
@@ -98,7 +98,7 @@ def fermatsFactorization(n, itr = 10**6):
             print(f"No non-trivial factors (a),(b) found within {itr} iterations!")
             print(f"{max_itr} iterations required (at worst case) for a definite result.")
         else: 
-            print("Input (n) is a prime number!")
+            print(f"Input ({n}) is a prime number!")
         return False
     
     a = (t+s)
