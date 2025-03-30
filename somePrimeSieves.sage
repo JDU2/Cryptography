@@ -50,10 +50,10 @@ def prime_sieve_1(n):
 # ----------------------------------------------------------------------------------------------
 
 def prime_sieve_2(n, s1=True, s2=True):
-    """ Returns two complementary lists for prime numbers from 5 up to n (inclusive). """
+    """ Returns a list of all prime numbers from 5 up to n (inclusive), which is composed out of two subsets (residue class [1] and [5] mod 6). """
     """ Characteristics: Faster than sieve 1 as it does not consider primes 2, 3, and their multiples. """
-    """ s1, s2: Relates to the two sectors in which primes >= 5 can appear; more details in the code. """
-    """         Default values are "True". Set one of them to "False" to turn one sector off. """
+    """ s1, s2: Relates to the two sectors in which primes >= 5 can appear (mod 6). """
+    """         Set one of them to "false" if you want only primes from one sector. """
     """ Warning: Your execution environment might run out of memory and crash for inputs above 10^6. """
 
     if not isinstance(n, (int, Integer)):
