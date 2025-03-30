@@ -1,4 +1,4 @@
-''' Factorization methods - Pollard's rho, Pollard's (p-1), Fermat's '''
+''' Factorization methods - Based on Fermat's and Dixon's methods '''
 ''' by JDU '''
 
 # ----------------------------------------------------------------------------------------------------
@@ -8,11 +8,11 @@ from sage.all import *      # See Cryptography/README.md
 # ----------------------------------------------------------------------------------------------------
 
 def fermatsFactorization(n, itr = 10**6):
-    """ Returns two non-trivial factors (a) and (b) of integer (n) after performing at most (itr) iterations or "false". """
-    """ Fermat's formula:     n = ab = (t+s)(t-s) = t²-s² """
-    """ Characteristics: Optimized step size by sorting out prime factors 2 and 3. """
-    """                  If you prefer a simpler implementation, then just sort out prime """
-    """                  factor 2 and use a step size of 2, which does not rely on mod 6 analysis. """
+    """ Returns two distinct non-trivial factors (a) and (b) of an odd integer (n), after performing at most (itr) iterations, otherwise "false". """
+    """ Fermat's formula:     n = ab = (t+s)(t-s) = t²-s² , where n is odd and a > b > 0. """       
+    """ Characteristics: Optimized step size by sorting out prime factor 3. """
+    """                  If you prefer a simpler implementation, then just sort out prime factor 2 """
+    """                  (standard) and use a step size of 2, which does not rely on mod 6 analysis. """
     """ Note: Non-trivial factors do exclude 1 and itself (n). """
     """       If (n) is composite, then (b) is its smallest possible prime factor. """
     """       Prints the maximum number of iterations required for a definite """
@@ -20,7 +20,8 @@ def fermatsFactorization(n, itr = 10**6):
 
     if not isinstance(n, (int, Integer)) or not isinstance(itr, (int, Integer)):
         raise TypeError("Inputs (n, itr) must be integers!")
-
+    if n % 2 == 0:
+        raise ValueError("Input (n) must be odd!")
     if itr < 1: 
         raise ValueError("Input (itr) must be >= 1")
 
@@ -29,7 +30,6 @@ def fermatsFactorization(n, itr = 10**6):
             print(f"Input ({n}) is a prime number!")
         return False
 
-    if n % 2 == 0: return n//2, 2
     if n % 3 == 0: return n//3, 3
 
     if is_square(n): 
