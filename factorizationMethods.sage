@@ -107,3 +107,91 @@ def fermatsFactorization(n, itr = 10**6):
     return a, b
 
 # ----------------------------------------------------------------------------------------------------
+
+def dixonsFactorization(n, B, B_fn=False):
+    """ Returns two non-trivial factors of integer (n), based on a random search with a given smoothness bound (B or B_fn), otherwise "none". """
+    """ From Fermat:     n = (x+y)(x-y) = x²-y² """    
+    """ Dixons's Idea:   x² = y² (mod n) """
+    """                  Now find random values x² (mod n) that are B-smooth and collect the exponent vectors (mod 2) of their prime factors over the whole factor base for (B). """
+    """                  Use linear algebra to find combinations of these exponent vectors (by vector addition) that result in a zero vector (mod 2). """
+    """                  Then, take each of these found combinations of exponent vectors and construct a congruence of squares => x² = y² (mod n), """
+    """                  where x is constructed by multiplying their corresponding x values together (mod n) and y is constructed by multiplying """
+    """                  their corresponding y² values (=> x² (mod n)) together, then taken the square root of the product (mod n). """
+    """ Characteristics: Implementation based on the suggestions from the book "applied cryptanalysis" by Stamp and Low. """
+    """                  This implementation uses (-1) as an additional entry in the factor base and searches for modular """
+    """                  numbers between (-n/2) and (n/2), which allows finding more B-smooth numbers for smaller choices of B. """
+    """                  (B) can be chosen manually or from a menu of functions that are dependent on (n). """
+    """                  To selcect such function choose (B_fn) between [1,2,3] and set (B) to zero. """
+    """ Note: The success in finding a non-trivial factor of a composite integer (n) depends on """
+    """       the amount of relations (=> exponent vectors) and on the size of (B). """
+    """       This implementation collects len(factor_base)+1 relations, which is the minimum amount """
+    """       that guarantees to yield at least one linear dependency (=> zero vector). """
+    """       However, in some cases all the linear dependencies are based on x and y values """
+    """       where x+y = n and/or x = y, such that both of these conditions do """
+    """       (but don't always have to) result in a trivial factor of (n). """
+
+    if not isinstance(n, (int, Integer)) or not isinstance(B, (int, Integer)):
+        raise TypeError("Inputs (n, B) must be integers!")
+        
+    if n < 4: 
+        raise ValueError("Input (n) must be >= 4")
+        
+    if not B:
+        # two good lower bounds for B:
+        if B_fn == 1: 
+            B = isqrt(sqrt(n)) # B = n^(1/4)
+        elif B_fn == 2: 
+            B = int(log(n)**2) # B = ln(n)²
+        # good balanced upper bound for B:
+        elif B_fn == 3: 
+            B = ceil(exp(sqrt(log(n)*log(log(n))/2))) # B = e^((ln(n)*ln(ln(n))/2)^(1/2))
+        else: raise ValueError("Input (B_fn) must be in [1,2,3]")
+            
+    if B < 2: 
+        raise ValueError("Input (B) must be >= 2")
+    
+    factor_base = [-1]+[p for p in prime_range(B+1)]
+    x_components, y2_components, relations = [], [], []
+    start = floor(sqrt(n))+1
+
+    while len(relations) < len(factor_base)+1:
+        while True:  
+            # Find numbers x such that (x^2 % n) is B-smooth
+            x = randint(start, n-1)
+            x2_mod_n = power_mod(x, 2, n)
+            if not x2_mod_n:
+                continue
+            if x2_mod_n > n/2:
+                x2_mod_n -= n
+            fctrs = factor(x2_mod_n)
+            fctrs_dict = dict(fctrs)
+            if x2_mod_n < 0:
+                fctrs_dict[-1] = 1 # needs to be set manually!
+            if all(p in factor_base for p in fctrs_dict):
+                break       
+        exponent_vector = [fctrs_dict.get(p,0)%2 for p in factor_base]
+        x_components.append(x)
+        y2_components.append(x2_mod_n)
+        relations.append(exponent_vector)
+
+    M = Matrix(GF(2), len(factor_base), len(relations))
+    for i, exp_v in enumerate(relations):
+        M.set_column(i, exp_v)
+
+    null_space = M.right_kernel()
+    for v in null_space.basis():
+        x = prod(x_components[i] for i in range(len(v)) if v[i] == 1) % n
+        print(x)
+        y2 = prod(y2_components[i] for i in range(len(v)) if v[i] == 1)
+        y = isqrt(y2) % n
+        print(y)
+        d = gcd(x - y, n)
+        if 1 < d < n:
+            return d, n//d  # Factorization succeeded
+        d = gcd(x + y, n)
+        if 1 < d < n:
+            return d, n//d  # Factorization succeeded
+            
+    return None  # Factorization failed
+
+# ----------------------------------------------------------------------------------------------------
