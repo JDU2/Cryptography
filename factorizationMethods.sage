@@ -7,7 +7,7 @@ from sage.all import *      # See Cryptography/README.md
 
 # ----------------------------------------------------------------------------------------------------
 
-def fermatsFactorization(n, itr=10**6):
+def fermatsFactorization(n, itr = 10**6):
     """ Returns two distinct non-trivial factors (a) and (b) of an odd integer (n), after performing at most (itr) iterations, otherwise "false". """
     """ Fermat's formula:     n = ab = (t+s)(t-s) = t²-s² , where n is odd and a > b > 0. """       
     """ Characteristics: Optimized step size by sorting out prime factor 3. """
@@ -108,12 +108,12 @@ def fermatsFactorization(n, itr=10**6):
 
 # ----------------------------------------------------------------------------------------------------
 
-def dixonsFactorization(n, B, B_fn=False):
+def dixonsFactorization(n, B, B_fn = False):
     """ Returns two non-trivial factors of integer (n), based on a random search with a given smoothness bound (B or B_fn), otherwise "none". """
     """ From Fermat:     n = (x+y)(x-y) = x²-y² """    
     """ Dixons's Idea:   x² = y² (mod n) """
     """                  Now find random values x² (mod n) that are B-smooth and collect the exponent vectors (mod 2) of their prime factors over the whole factor base for (B). """
-    """                  Use linear algebra to find combinations of these exponent vectors (by vector addition) that result in a zero vector (mod 2). """
+    """                  Solve the system of linear equations to find combinations of exponent vectors (by vector addition) that result in a zero vector (mod 2). """
     """                  Then, take each of these found combinations of exponent vectors and construct a congruence of squares => x² = y² (mod n), """
     """                  where x is constructed by multiplying their corresponding x values together (mod n) and y is constructed by multiplying """
     """                  their corresponding y² values (=> x² (mod n)) together, then taken the square root of the product (mod n). """
