@@ -7,7 +7,7 @@ from sage.all import *      # See Cryptography/README.md
 
 # ----------------------------------------------------------------------------------------------------
 
-def fermatsFactorization(n, itr = 10**6):
+def fermatsFactorization(n, itr=10**6):
     """ Returns two distinct non-trivial factors (a) and (b) of an odd integer (n), after performing at most (itr) iterations, otherwise "false". """
     """ Fermat's formula:     n = ab = (t+s)(t-s) = t²-s² , where n is odd and a > b > 0. """       
     """ Characteristics: Optimized step size by sorting out prime factor 3. """
