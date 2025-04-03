@@ -181,10 +181,8 @@ def dixonsFactorization(n, B, B_fn = False):
     null_space = M.right_kernel()
     for v in null_space.basis():
         x = prod(x_components[i] for i in range(len(v)) if v[i] == 1) % n
-        print(x)
         y2 = prod(y2_components[i] for i in range(len(v)) if v[i] == 1)
         y = isqrt(y2) % n
-        print(y)
         d = gcd(x - y, n)
         if 1 < d < n:
             return d, n//d  # Factorization succeeded
