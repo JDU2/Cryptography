@@ -123,7 +123,7 @@ def dixonsFactorization(n, B, B_fn = False):
     """                  (B) can be chosen manually or from a menu of functions that are dependent on (n). """
     """                  To selcect such function choose (B_fn) between [1,2,3] and set (B) to zero. """
     """ Note: The success in finding a non-trivial factor of a composite integer (n) depends on """
-    """       the amount of relations (=> exponent vectors) and on the size of (B). """
+    """       the amount of relations (=> exponent vectors mod 2) and on the size of (B). """
     """       This implementation collects len(factor_base)+1 relations, which is the minimum amount """
     """       that guarantees to yield at least one linear dependency (=> zero vector). """
     """       However, in some cases all the linear dependencies are based on x and y values """
@@ -169,10 +169,10 @@ def dixonsFactorization(n, B, B_fn = False):
                 fctrs_dict[-1] = 1 # needs to be set manually!
             if all(p in factor_base for p in fctrs_dict):
                 break       
-        exponent_vector = [fctrs_dict.get(p,0)%2 for p in factor_base]
+        exponent_vector_mod_2 = [fctrs_dict.get(p,0)%2 for p in factor_base]
         x_components.append(x)
         y2_components.append(x2_mod_n)
-        relations.append(exponent_vector)
+        relations.append(exponent_vector_mod_2)
 
     M = Matrix(GF(2), len(factor_base), len(relations))
     for i, exp_v in enumerate(relations):
