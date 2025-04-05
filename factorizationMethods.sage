@@ -8,7 +8,7 @@ from sage.all import *      # See Cryptography/README.md
 # ----------------------------------------------------------------------------------------------------
 
 def fermatsFactorization(n, itr = 10**6):
-    """ Returns two distinct non-trivial factors (a) and (b) of an odd integer (n), after performing at most (itr) iterations, otherwise "false". """
+    """ Returns two distinct non-trivial factors (a) and (b) of an odd integer (n), after performing at most (itr) iterations, otherwise returns "false". """
     """ Fermat's formula:     n = ab = (t+s)(t-s) = t²-s² , where n is odd and a > b > 0. """       
     """ Characteristics: Optimized step size by sorting out prime factor 3. """
     """                  If you prefer a simpler implementation, then just sort out prime factor 2 """
@@ -109,26 +109,26 @@ def fermatsFactorization(n, itr = 10**6):
 # ----------------------------------------------------------------------------------------------------
 
 def dixonsFactorization(n, B, B_fn = False):
-    """ Returns two non-trivial factors of integer (n), based on a random search with a given smoothness bound (B or B_fn), otherwise "none". """
+    """ Returns two non-trivial factors of integer (n), based on a random search with a given smoothness bound (B or B_fn), otherwise returns "none". """
     """ From Fermat:     n = (x+y)(x-y) = x²-y² """    
     """ Dixons's Idea:   x² = y² (mod n) """
-    """                  Now find random values x² (mod n) that are B-smooth and collect the exponent vectors (mod 2) of their prime factors over the whole factor base for (B). """
+    """                  Now find random values x² (mod n) that are B-smooth and collect the exponent vectors (mod 2) of their prime factors over the whole factor base determined by (B). """
     """                  Solve the system of linear equations to find combinations of exponent vectors (by vector addition) that result in a zero vector (mod 2). """
     """                  Then, take each of these found combinations of exponent vectors and construct a congruence of squares => x² = y² (mod n), """
     """                  where x is constructed by multiplying their corresponding x values together (mod n) and y is constructed by multiplying """
-    """                  their corresponding y² values (=> x² (mod n)) together, then taken the square root of the product (mod n). """
+    """                  their corresponding y² component values (=> x² (mod n)) together, then taken the square root of the product (mod n). """
     """ Characteristics: Implementation based on the suggestions from the book "applied cryptanalysis" by Stamp and Low. """
     """                  This implementation uses (-1) as an additional entry in the factor base and searches for modular """
-    """                  numbers between (-n/2) and (n/2), which allows finding more B-smooth numbers for smaller choices of B. """
+    """                  numbers between (-n/2) and (n/2), which allows finding more B-smooth numbers within the smoothness bound. """
     """                  (B) can be chosen manually or from a menu of functions that are dependent on (n). """
-    """                  To selcect such function choose (B_fn) between [1,2,3] and set (B) to zero. """
+    """                  To selcect such function choose (B_fn) between [1,2,3] and set (B) to zero or "false". """
     """ Note: The success in finding a non-trivial factor of a composite integer (n) depends on """
-    """       the amount of relations (=> exponent vectors mod 2) and on the size of (B). """
+    """       the amount of relations (=> B-smooth numbers x² mod n) and on the size of (B). """
     """       This implementation collects len(factor_base)+1 relations, which is the minimum amount """
-    """       that guarantees to yield at least one linear dependency (=> zero vector). """
-    """       However, in some cases all the linear dependencies are based on x and y values """
-    """       where x+y = n and/or x = y, such that both of these conditions do """
-    """       (but don't always have to) result in a trivial factor of (n). """
+    """       that guarantees to yield at least one linear dependency (=> zero vector mod 2). """
+    """       However, in some cases all the linear dependencies are based on x and y values, """
+    """       where x+y = n and/or x = y, such that both of these conditions can (but don't """
+    """       always have to) result in a trivial factor of (n), which returns "none". """
 
     if not isinstance(n, (int, Integer)) or not isinstance(B, (int, Integer)):
         raise TypeError("Inputs (n, B) must be integers!")
@@ -151,27 +151,31 @@ def dixonsFactorization(n, B, B_fn = False):
         raise ValueError("Input (B) must be >= 2")
     
     factor_base = [-1]+[p for p in prime_range(B+1)]
-    x_components, y2_components, relations = [], [], []
+    x_components_candidates, y2_components_candidates, relations = [], [], []
     start = floor(sqrt(n))+1
 
-    while len(relations) < len(factor_base)+1:
+    while len(relations) < len(factor_base)+1: # this guarantees to yield at least one linear dependency
         while True:  
-            # Find numbers x such that (x^2 % n) is B-smooth
+            # find numbers x such that (x^2 % n) is B-smooth (=> relation)
             x = randint(start, n-1)
             x2_mod_n = power_mod(x, 2, n)
             if not x2_mod_n:
+                # 0 can't be factored
                 continue
             if x2_mod_n > n/2:
+                # reduce absolute value by shifting into negative space
                 x2_mod_n -= n
             fctrs = factor(x2_mod_n)
-            fctrs_dict = dict(fctrs)
+            fctrs_dict = dict(fctrs) # dictionary maps prime factors to their exponents
             if x2_mod_n < 0:
                 fctrs_dict[-1] = 1 # needs to be set manually!
             if all(p in factor_base for p in fctrs_dict):
+                # new relation found!
                 break       
         exponent_vector_mod_2 = [fctrs_dict.get(p,0)%2 for p in factor_base]
-        x_components.append(x)
-        y2_components.append(x2_mod_n)
+        x_components_candidates.append(x)
+        y2_components_candidates.append(x2_mod_n)
+        # let exponent vectors mod 2 represent the relations
         relations.append(exponent_vector_mod_2)
 
     M = Matrix(GF(2), len(factor_base), len(relations))
@@ -180,16 +184,20 @@ def dixonsFactorization(n, B, B_fn = False):
 
     null_space = M.right_kernel()
     for v in null_space.basis():
-        x = prod(x_components[i] for i in range(len(v)) if v[i] == 1) % n
-        y2 = prod(y2_components[i] for i in range(len(v)) if v[i] == 1)
+        # construct x for congruence of squares x²=y² (mod n)
+        x = prod(x_components_candidates[i] for i in range(len(v)) if v[i] == 1) % n
+        # construct y² for congruence of squares x²=y² (mod n)
+        y2 = prod(y2_components_candidates[i] for i in range(len(v)) if v[i] == 1)
+        # get y
         y = isqrt(y2) % n
+        # find non-trivial factors of n
         d = gcd(x - y, n)
         if 1 < d < n:
-            return d, n//d  # Factorization succeeded
+            return d, n//d  # factorization succeeded
         d = gcd(x + y, n)
         if 1 < d < n:
-            return d, n//d  # Factorization succeeded
+            return d, n//d  # factorization succeeded
             
-    return None  # Factorization failed
+    return None  # factorization failed
 
 # ----------------------------------------------------------------------------------------------------
