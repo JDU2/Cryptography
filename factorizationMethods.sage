@@ -1,13 +1,59 @@
-''' Factorization methods - Based on Fermat's and Dixon's methods '''
+''' Factorization methods - Based on Trial division, Fermat's method, and Dixon's method '''
 ''' by JDU '''
 
 # ----------------------------------------------------------------------------------------------------
 
-from sage.all import *      # See Cryptography/README.md 
+from sage.all import *    # See Cryptography/README.md
+
+# ------------------------------------------------------------------------------------------------------------
+
+def trialDivisionFactorization(n, itr):
+    """ Searches for a non-trivial factor of a composite integer (n) by trial division, for up to (itr) iterations. """
+    """ Characteristics: A simple optimized approach without the reliance on prime counting tools. Uses a step size of 6. """
+    """                  If a factor is found it returns the factorization based on that factor, otherwise "none". """
+    """ Note: If the given number of iterations (itr) is not sufficient, it prints out the the max amount of iterations """
+    """       required to find a factor of (n) for the theoretical worst case, where (n) would be a perfect square of a """
+    """       prime number. Additionally, it prints out the coverage level of worst case iterations (in %). """
+    """ Warning: This method becomes slow for (itr) above 10^8 (required for prime factors > 6 x 10^8). """
+
+    if not isinstance(n, (int, Integer)) or not isinstance(itr, (int, Integer)):
+        raise TypeError("Inputs (n, itr) must be integers!")
+
+    if n < 4:       raise ValueError("Input (n) must be >= 4")
+    if is_prime(n): raise ValueError("Input (n) must be a composite number!")
+    if itr < 1:     raise ValueError("Input (itr) must be >= 1")
+
+    # Test prime factors 2 and 3    
+    if (n % 2 == 0): 
+        return 2, n//2
+    if (n % 3 == 0): 
+        return 3, n//3
+        
+    itrLimit = itr      
+    sr = floor(sqrt(n))
+    wc_itr = ((sr-1)//6)+1
+    
+    # Adjustments for special properties
+    if (sr % 6) != 5: wc_itr -= 1  
+    if (sr % 6) != 1: sr += 1
+
+    # Test all other potential prime factors
+    for i in range(5, sr, 6):
+        if (n % i == 0):
+            return i, n//i
+        if (n % (i+2) == 0):
+            return i+2, n//(i+2)
+        itr -= 1
+        if itr == 0:
+            wc_coverage = itrLimit*100/float(wc_itr)
+            print(f"Result: No prime factors found within {itrLimit} iterations! \n")
+            print(f"This method requires {wc_itr} iterations for the worst case (=> if (n) is a perfect square of a prime number). \n")
+            print(f"Coverage of worst case iteration amount: {wc_coverage:.18f} % \n")
+            return None
 
 # ----------------------------------------------------------------------------------------------------
 
-def fermatsFactorization(n, itr = 10**6):
+def fermatsFactorization(n, itr = 2*10**6):
     """ Returns two distinct non-trivial factors (a) and (b) of an odd integer (n), after performing at most (itr) iterations, otherwise returns "false". """
     """ Fermat's formula:     n = ab = (t+s)(t-s) = t²-s² , where n is odd and a > b > 0. """       
     """ Characteristics: Optimized step size by sorting out prime factor 3. """
@@ -17,6 +63,7 @@ def fermatsFactorization(n, itr = 10**6):
     """       If (n) is composite, then (b) is its smallest possible prime factor. """
     """       Prints the maximum number of iterations required for a definite """
     """       result, if no factors were found within (itr) iterations. """
+    """ Warning: This method becomes slow for performed (itr) above 2 x 10^6. """
 
     if not isinstance(n, (int, Integer)) or not isinstance(itr, (int, Integer)):
         raise TypeError("Inputs (n, itr) must be integers!")
@@ -57,6 +104,7 @@ def fermatsFactorization(n, itr = 10**6):
                 break
             t += 1
 
+    # Remaining case
     elif n % 6 == 5:
         # (t) can only be in residue classes [0],[3] mod 6
         while True:
