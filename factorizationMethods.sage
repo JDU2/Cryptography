@@ -60,7 +60,7 @@ def fermatsFactorization(n, itr = 2*10**6):
     """ Characteristics: Optimized step size by sorting out prime factor 3. """
     """                  If you prefer a simpler implementation, then just sort out prime factor 2 """
     """                  (standard) and use a step size of 2, which does not rely on mod 6 analysis. """
-    """ Note: Fermat's method works best if the difference of (a) and (b) is expected to be small. """"
+    """ Note: Fermat's method works best if the difference of (a) and (b) is expected to be small. """
     """       If no factors were found within (itr) iterations, it prints the maximum number """
     """       of iterations required for a definite result (=> factorization or primeness). """
     """ Warning: This method becomes slow for performed (itr) above 2 x 10^6. """
@@ -160,12 +160,13 @@ def fermatsFactorization(n, itr = 2*10**6):
 def dixonsFactorization(n, B, B_fn = False):
     """ Returns two non-trivial factors of integer (n), based on a random search with a given smoothness bound (B or B_fn), otherwise returns "none". """
     """ From Fermat:     n = (x+y)(x-y) = x²-y² """    
-    """ Dixons's Idea:   x² = y² (mod n) """
+    """ Dixons's Idea:   n = (x+y)(x-y) = x²-y² = 0 (mod n) """
+    """                  Therefore, x² = y² (mod n) """
     """                  Now find random values x² (mod n) that are B-smooth and collect the exponent vectors (mod 2) of their prime factors over the whole factor base determined by (B). """
     """                  Solve the system of linear equations to find combinations of exponent vectors (by vector addition) that result in a zero vector (mod 2). """
     """                  Then, take each of these found combinations of exponent vectors and construct a congruence of squares => x² = y² (mod n), """
     """                  where x is constructed by multiplying their corresponding x values together (mod n) and y is constructed by multiplying """
-    """                  their corresponding y² component values (=> x² (mod n)) together, then taken the square root of the product (mod n). """
+    """                  their corresponding y² component values (=> x² mod n) together, then taken the square root of the product (mod n). """
     """ Characteristics: Implementation based on the suggestions from the book "applied cryptanalysis" by Stamp and Low. """
     """                  This implementation uses (-1) as an additional entry in the factor base and searches for modular """
     """                  numbers between (-n/2) and (n/2), which allows finding more B-smooth numbers within the smoothness bound. """
@@ -235,10 +236,12 @@ def dixonsFactorization(n, B, B_fn = False):
     for v in null_space.basis():
         # construct x for congruence of squares x²=y² (mod n)
         x = prod(x_components_candidates[i] for i in range(len(v)) if v[i] == 1) % n
+        print(x)
         # construct y² for congruence of squares x²=y² (mod n)
         y2 = prod(y2_components_candidates[i] for i in range(len(v)) if v[i] == 1)
         # get y
         y = isqrt(y2) % n
+        print(y)
         # find non-trivial factors of n
         d = gcd(x - y, n)
         if 1 < d < n:
