@@ -54,106 +54,107 @@ def trialDivisionFactorization(n, itr):
 # ----------------------------------------------------------------------------------------------------
 
 def fermatsFactorization(n, itr = 2*10**6):
-    """ Returns two distinct non-trivial factors (a) and (b) of an odd integer (n), after performing at most (itr) iterations, otherwise returns "false". """
-    """ Fermat's formula:     n = ab = (t+s)(t-s) = t²-s² , where n is odd and a > b > 0. """       
+    """ Returns two distinct non-trivial factors (a) and (b) of a positive odd integer (n), """
+    """ after performing at most (itr) iterations, otherwise returns "false". """
+    """ Fermat's formula: n = ab = (x+y)(x-y) = x²-y², where n is odd and a > b > 0. """       
     """ Characteristics: Optimized step size by sorting out prime factor 3. """
     """                  If you prefer a simpler implementation, then just sort out prime factor 2 """
     """                  (standard) and use a step size of 2, which does not rely on mod 6 analysis. """
-    """ Note: Non-trivial factors do exclude 1 and itself (n). """
-    """       If (n) is composite, then (b) is its smallest possible prime factor. """
-    """       Prints the maximum number of iterations required for a definite """
-    """       result, if no factors were found within (itr) iterations. """
+    """ Note: Fermat's method works best if the difference of (a) and (b) is expected to be small. """"
+    """       If no factors were found within (itr) iterations, it prints the maximum number """
+    """       of iterations required for a definite result (=> factorization or primeness). """
     """ Warning: This method becomes slow for performed (itr) above 2 x 10^6. """
 
     if not isinstance(n, (int, Integer)) or not isinstance(itr, (int, Integer)):
-        raise TypeError("Inputs (n, itr) must be integers!")
+        raise TypeError("Inputs (n, itr) must be integers!") 
+    if n < 0:
+        raise ValueError("Input (n) must be positive!")
     if n % 2 == 0:
         raise ValueError("Input (n) must be odd!")
     if itr < 1: 
         raise ValueError("Input (itr) must be >= 1")
 
-    if n <= 3:
-        if n == 2 or n == 3: 
+    # Sorting out prime factor 3
+    if n % 3 == 0: 
+        if n == 3: 
             print(f"Input ({n}) is a prime number!")
-        return False
+            return False
+        return n//3, 3
 
-    if n % 3 == 0: return n//3, 3
-
+    # Sorting out squares (a must be greater than b!)
     if is_square(n): 
         print(f"Input ({n}) is a square value!")
         return False
 
-    # Initial values for t and s
-    t = floor(sqrt(n))+1
-    s = 0
+    # Initial values for x and y
+    x = floor(sqrt(n))+1
+    y = 0
 
-    # Worst case: (b) = 5 (smallest prime factor after 2 and 3)
-    max_s = ((n/5) - 5)/2       
-    max_t = sqrt(n + max_s**2)
-    
+    # Worst case: (b) = 5 (=> smallest prime factor after 2 and 3)
+    max_y = ((n/5) - 5)/2       
+    max_x = sqrt(n + max_y**2)
+
+    # Now that we sorted out prime factors 2 and 3 ...
     # (n) can only be in residue classes [1],[5] mod 6
     if n % 6 == 1:
-        # (t) can only be in residue classes [1],[2],[4],[5] mod 6
+        # (x) can only be in residue classes [1],[2],[4],[5] mod 6
         while True:
-            # Adjust start value for (t)
-            if t%6 == 1 or t%6 == 4:
-                t_1st_step, t_2nd_step = 1, 2
+            # Adjust start value for (x)
+            if x%6 == 1 or x%6 == 4:
+                x_1st_step, x_2nd_step = 1, 2
                 break
-            elif t%6 == 2 or t%6 == 5:
-                t_1st_step, t_2nd_step = 2, 1
+            elif x%6 == 2 or x%6 == 5:
+                x_1st_step, x_2nd_step = 2, 1
                 break
-            t += 1
+            x += 1
 
     # Remaining case
     elif n % 6 == 5:
-        # (t) can only be in residue classes [0],[3] mod 6
+        # (x) can only be in residue classes [0],[3] mod 6
         while True:
-            # Adjust start value for (t)
-            if t%6 == 0 or t%6 == 3:
-                t_step = 3
+            # Adjust start value for (x)
+            if x%6 == 0 or x%6 == 3:
+                x_step = 3
                 break
-            t += 1
+            x += 1
 
-    # Worst case iterations for compositeness
-    max_itr = floor((max_t - t)/3)+1
+    # Worst case iterations for compositeness (or primeness) of (n)
+    max_itr = floor((max_x - x)/3)+1
 
-    # Limit iterations for case (n) is prime
-    if itr > max_itr:
-        itr = max_itr
-
-    # (n) can only be in residue classes [1],[5] mod 6
+    # Now search for a perfect square of (y) by stepping up (x) (=> x²-n = y²)
     if n % 6 == 1:
         for _ in range(itr):
-            if is_square(t**2 - n):
-                s = sqrt(t**2 - n)
+            if is_square(x**2 - n):
+                y = sqrt(x**2 - n)
                 break
-            t += t_1st_step
-            if is_square(t**2 - n):
-                s = sqrt(t**2 - n)
+            x += x_1st_step
+            if is_square(x**2 - n):
+                y = sqrt(x**2 - n)
                 break
-            t += t_2nd_step
+            x += x_2nd_step
 
     elif n % 6 == 5:
         for _ in range(itr):
-            if is_square(t**2 - n):
-                s = sqrt(t**2 - n)
+            if is_square(x**2 - n):
+                y = sqrt(x**2 - n)
                 break
-            t += t_step
+            x += x_step
 
-    # No integer square value of (s) was found 
-    if not s:
+    # Failure: No integer square value of (y) has been found 
+    if not y:
         if itr < max_itr:
             print(f"No non-trivial factors (a),(b) found within {itr} iterations!")
             print(f"{max_itr} iterations required (at worst case) for a definite result.")
         else: 
             print(f"Input ({n}) is a prime number!")
         return False
-    
-    a = (t+s)
-    b = (t-s)
-    
-    return a, b
 
+    # Factorize (n)
+    a = (x+y)
+    b = (x-y)
+
+    # Success
+    return a, b
 # ----------------------------------------------------------------------------------------------------
 
 def dixonsFactorization(n, B, B_fn = False):
