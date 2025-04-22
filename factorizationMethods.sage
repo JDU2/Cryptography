@@ -237,6 +237,16 @@ def dixonsFactorization(n, B, B_fn = False):
                 continue
             if x2_mod_n < 0:
                 exponent_vector_mod_2[0] = 1
+            elif sum(exponent_vector_mod_2) == 0: 
+                # check single relation
+                y = isqrt(x2_mod_n) % n
+                # find non-trivial factors of n
+                d = gcd(x - y, n)
+                if 1 < d < n:
+                    return d, n//d # factorization succeeded
+                d = gcd(x + y, n)
+                if 1 < d < n:
+                    return d, n//d # factorization succeeded
             # exit inner while-loop
             break
         
