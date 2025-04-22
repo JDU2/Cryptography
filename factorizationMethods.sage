@@ -181,11 +181,9 @@ def dixonsFactorization(n, B, B_fn = False):
     """       always have to) result in a trivial factor of (n), which returns "none". """
 
     if not isinstance(n, (int, Integer)) or not isinstance(B, (int, Integer)):
-        raise TypeError("Inputs (n, B) must be integers!")
-        
+        raise TypeError("Inputs (n, B) must be integers!")  
     if n < 4: 
-        raise ValueError("Input (n) must be >= 4")
-        
+        raise ValueError("Input (n) must be >= 4")   
     if not B:
         # two good lower bounds for B
         if B_fn == 1: 
@@ -196,8 +194,7 @@ def dixonsFactorization(n, B, B_fn = False):
         elif B_fn == 3: 
             B = ceil(exp(sqrt(log(n)*log(log(n))/2))) # B = e^((ln(n)*ln(ln(n))/2)^(1/2))
         else: 
-            raise ValueError("Input (B_fn) must be in [1,2,3]")
-            
+            raise ValueError("Input (B_fn) must be in [1,2,3]")       
     if B < 2: 
         raise ValueError("Input (B) must be >= 2")
     
