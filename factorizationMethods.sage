@@ -233,7 +233,7 @@ def dixonsFactorization(n, B, B_fn = False):
                     exponents[i] += 1
                 if abs(a) == 1:
                     # new B-smooth relation found!
-                    exponent_vector_mod_2 = [f % 2 for f in exponents]
+                    exponent_vector_mod_2 = [e % 2 for e in exponents]
                     break
             if abs(a) > 1:
                 # relation is not B-smooth
