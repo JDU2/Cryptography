@@ -203,7 +203,7 @@ def dixonsFactorization(n, B, B_fn = False):
     
     factor_base = [-1]+[p for p in prime_range(B+1)]
     x_components_candidates, y2_components_candidates, relations = [], [], []
-    sr = floor(sqrt(n))
+    sr = floor(sqrt(n))+1
 
     while len(relations) < len(factor_base)+1: # this guarantees to yield at least one linear dependency
 
