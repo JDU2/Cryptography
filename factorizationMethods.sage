@@ -187,42 +187,71 @@ def dixonsFactorization(n, B, B_fn = False):
         raise ValueError("Input (n) must be >= 4")
         
     if not B:
-        # two good lower bounds for B:
+        # two good lower bounds for B
         if B_fn == 1: 
             B = isqrt(sqrt(n)) # B = n^(1/4)
         elif B_fn == 2: 
             B = int(log(n)**2) # B = ln(n)²
-        # good balanced upper bound for B:
+        # good balanced upper bound for B
         elif B_fn == 3: 
             B = ceil(exp(sqrt(log(n)*log(log(n))/2))) # B = e^((ln(n)*ln(ln(n))/2)^(1/2))
-        else: raise ValueError("Input (B_fn) must be in [1,2,3]")
+        else: 
+            raise ValueError("Input (B_fn) must be in [1,2,3]")
             
     if B < 2: 
         raise ValueError("Input (B) must be >= 2")
     
     factor_base = [-1]+[p for p in prime_range(B+1)]
     x_components_candidates, y2_components_candidates, relations = [], [], []
-    start = floor(sqrt(n))+1
+    sr = floor(sqrt(n))
 
     while len(relations) < len(factor_base)+1: # this guarantees to yield at least one linear dependency
+
         while True:  
             # find numbers x such that (x^2 % n) is B-smooth (=> relation)
-            x = randint(start, n-1)
+            x = randint(sr, n-1)
+            if x in x_components_candidates:
+                continue
             x2_mod_n = power_mod(x, 2, n)
             if not x2_mod_n:
-                # 0 can't be factored
-                continue
+                # 0 can't get factored!
+                # but we can directly check the relation
+                # note: y = sqrt(x2_mod_n)%n = 0
+                d = gcd(x, n)
+                if 1 < d < n:
+                    return d, n//d # factorization succeeded
             if x2_mod_n > n/2:
                 # reduce absolute value by shifting into negative space
                 x2_mod_n -= n
-            fctrs = factor(x2_mod_n)
-            fctrs_dict = dict(fctrs) # dictionary maps prime factors to their exponents
+                        
+            # start trial division over factor base (excluding -1)
+            exponents = [0] * len(factor_base)
+            a = x2_mod_n
+            for i, p in enumerate(factor_base[1::],1):
+                while a % p == 0:
+                    a //= p
+                    exponents[i] += 1
+                if abs(a) == 1:
+                    # new B-smooth relation found!
+                    exponent_vector_mod_2 = [f % 2 for f in exponents]
+                    break
+            if abs(a) > 1:
+                # relation is not B-smooth
+                continue
             if x2_mod_n < 0:
-                fctrs_dict[-1] = 1 # needs to be set manually!
-            if all(p in factor_base for p in fctrs_dict):
-                # new relation found!
-                break       
-        exponent_vector_mod_2 = [fctrs_dict.get(p,0)%2 for p in factor_base]
+                exponent_vector_mod_2[0] = 1
+            # exit inner while-loop
+            break
+        
+        if sum(exponent_vector_mod_2) == 0: # check single relation
+            y = isqrt(x2_mod_n) % n
+            # find non-trivial factors of n
+            d = gcd(x - y, n)
+            if 1 < d < n:
+                return d, n//d # factorization succeeded
+            d = gcd(x + y, n)
+            if 1 < d < n:
+                return d, n//d # factorization succeeded
         x_components_candidates.append(x)
         y2_components_candidates.append(x2_mod_n)
         # let exponent vectors mod 2 represent the relations
@@ -232,24 +261,23 @@ def dixonsFactorization(n, B, B_fn = False):
     for i, exp_v in enumerate(relations):
         M.set_column(i, exp_v)
 
+    # solve system of linear equations
     null_space = M.right_kernel()
     for v in null_space.basis():
         # construct x for congruence of squares x²=y² (mod n)
         x = prod(x_components_candidates[i] for i in range(len(v)) if v[i] == 1) % n
-        print(x)
         # construct y² for congruence of squares x²=y² (mod n)
         y2 = prod(y2_components_candidates[i] for i in range(len(v)) if v[i] == 1)
         # get y
         y = isqrt(y2) % n
-        print(y)
         # find non-trivial factors of n
         d = gcd(x - y, n)
         if 1 < d < n:
-            return d, n//d  # factorization succeeded
+            return d, n//d # factorization succeeded
         d = gcd(x + y, n)
         if 1 < d < n:
-            return d, n//d  # factorization succeeded
+            return d, n//d # factorization succeeded
             
-    return None  # factorization failed
+    return None # factorization failed
 
 # ----------------------------------------------------------------------------------------------------
