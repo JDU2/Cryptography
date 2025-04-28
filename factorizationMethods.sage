@@ -158,27 +158,27 @@ def fermatsFactorization(n, itr = 2*10**6):
 # ----------------------------------------------------------------------------------------------------
 
 def dixonsFactorization(n, B, B_fn = False):
-    """ Returns two non-trivial factors of integer (n), based on a random search with a given smoothness bound (B or B_fn), otherwise returns "none". """
+    """ Returns two non-trivial factors of integer (n), based on a random search with a given smoothness bound (B or B_fn), otherwise returns "None". """
     """ From Fermat:     n = (x+y)(x-y) = x²-y² """    
     """ Dixons's Idea:   n = (x+y)(x-y) = x²-y² = 0 (mod n) """
     """                  Therefore, x² = y² (mod n) """
-    """                  Now find random values x² (mod n) that are B-smooth and collect the exponent vectors (mod 2) of their prime factors over the whole factor base determined by (B). """
+    """                  Now, find random values x² (mod n) that are B-smooth and collect the exponent vectors (mod 2) of their prime factors over the whole factor base determined by (B). """
     """                  Solve the system of linear equations to find combinations of exponent vectors (by vector addition) that result in a zero vector (mod 2). """
-    """                  Then, take each of these found combinations of exponent vectors and construct a congruence of squares => x² = y² (mod n), """
-    """                  where x is constructed by multiplying their corresponding x values together (mod n) and y is constructed by multiplying """
-    """                  their corresponding y² component values (=> x² mod n) together, then taken the square root of the product (mod n). """
+    """                  Then, take each of these linearly dependent combinations of exponent vectors and construct a congruence of squares => x² = y² (mod n), """
+    """                  where x is constructed by multiplying their corresponding x values together (mod n) and y² is constructed by multiplying """
+    """                  their corresponding y² component values (=> x² mod n) together, then taken the square root of the product (mod n) to get y. """
     """ Characteristics: Implementation based on the suggestions from the book "applied cryptanalysis" by Stamp and Low. """
     """                  This implementation uses (-1) as an additional entry in the factor base and searches for modular """
     """                  numbers between (-n/2) and (n/2), which allows finding more B-smooth numbers within the smoothness bound. """
     """                  (B) can be chosen manually or from a menu of functions that are dependent on (n). """
-    """                  To selcect such function choose (B_fn) between [1,2,3] and set (B) to zero or "false". """
+    """                  To selcect such function choose (B_fn) between [1,2,3] and set (B) to zero or "False". """
     """ Note: The success in finding a non-trivial factor of a composite integer (n) depends on """
     """       the amount of relations (=> B-smooth numbers x² mod n) and on the size of (B). """
     """       This implementation collects len(factor_base)+1 relations, which is the minimum amount """
     """       that guarantees to yield at least one linear dependency (=> zero vector mod 2). """
     """       However, in some cases all the linear dependencies are based on x and y values, """
-    """       where x+y = n and/or x = y, such that both of these conditions can (but don't """
-    """       always have to) result in a trivial factor of (n), which returns "none". """
+    """       where x+y = n and/or x = y, and both of these conditions can (but don't """
+    """       always have to) result in finding a trivial factor of (n), which returns "None". """
 
     if not isinstance(n, (int, Integer)) or not isinstance(B, (int, Integer)):
         raise TypeError("Inputs (n, B) must be integers!")  
@@ -187,9 +187,9 @@ def dixonsFactorization(n, B, B_fn = False):
     if not B:
         # two good lower bounds for B
         if B_fn == 1: 
-            B = isqrt(sqrt(n)) # B = n^(1/4)
+            B = isqrt(sqrt(n)) # B = n^(1/4), good for n < 10^11
         elif B_fn == 2: 
-            B = int(log(n)**2) # B = ln(n)²
+            B = int(log(n)**2) # B = ln(n)², good for n > 10^12
         # good balanced upper bound for B
         elif B_fn == 3: 
             B = ceil(exp(sqrt(log(n)*log(log(n))/2))) # B = e^((ln(n)*ln(ln(n))/2)^(1/2))
@@ -218,7 +218,7 @@ def dixonsFactorization(n, B, B_fn = False):
                 if 1 < d < n:
                     return d, n//d # factorization succeeded
             if x2_mod_n > n/2:
-                # reduce absolute value by shifting into negative space
+                # reduce absolute value by modular shift into negative space
                 x2_mod_n -= n
                         
             # start trial division over factor base (excluding -1)
@@ -250,15 +250,6 @@ def dixonsFactorization(n, B, B_fn = False):
             # exit inner while-loop
             break
         
-        if sum(exponent_vector_mod_2) == 0: # check single relation
-            y = isqrt(x2_mod_n) % n
-            # find non-trivial factors of n
-            d = gcd(x - y, n)
-            if 1 < d < n:
-                return d, n//d # factorization succeeded
-            d = gcd(x + y, n)
-            if 1 < d < n:
-                return d, n//d # factorization succeeded
         x_components_candidates.append(x)
         y2_components_candidates.append(x2_mod_n)
         # let exponent vectors mod 2 represent the relations
