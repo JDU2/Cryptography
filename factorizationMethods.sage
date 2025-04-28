@@ -167,6 +167,7 @@ def dixonsFactorization(n, B, B_fn = False):
     """                  Then, take each of these linearly dependent combinations of exponent vectors and construct a congruence of squares => x² = y² (mod n), """
     """                  where x is constructed by multiplying their corresponding x values together (mod n) and y² is constructed by multiplying """
     """                  their corresponding y² component values (=> x² mod n) together, then taken the square root of the product (mod n) to get y. """
+    """                  Then, check whether gcd(x-y,n) or gcd(x+y,n) results in a non-trivial factor of (n). """
     """ Characteristics: Implementation based on the suggestions from the book "applied cryptanalysis" by Stamp and Low. """
     """                  This implementation uses (-1) as an additional entry in the factor base and searches for modular """
     """                  numbers between (-n/2) and (n/2), which allows finding more B-smooth numbers within the smoothness bound. """
