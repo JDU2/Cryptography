@@ -1,3 +1,11 @@
+''' by JDU '''
+
+# ----------------------------------------------------------------------------------------------
+
+from sage.all import *      # See Cryptography/README.md 
+
+# ----------------------------------------------------------------------------------------------
+
 def pollards_rho_DLP(h, g):
     """ Returns the discrete logarithm of h to base g (mod p). """
     """ h and g must be elements of Zp* (with prime p), and be given in the form of mod(p)-objects. """
@@ -43,3 +51,5 @@ def pollards_rho_DLP(h, g):
                 x = (t_d*inv + k*n_d) %n
                 if g**x == h:
                     return x
+
+# ----------------------------------------------------------------------------------------------
