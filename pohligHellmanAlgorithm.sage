@@ -10,7 +10,7 @@ def pohlig_hellman(h, g, *pf):
     """ Returns the discrete logarithm of h to base g (mod p). """
     """ h and g must be elements of Zp* (with prime p), and be given in the form of mod(p)-objects. """
     """ g must be a generator of the group Zp*, """
-    """ and pf is the prime factorization [(p1,e1),...,(p?,e?)] of the order of the group Zp*. """
+    """ and pf is the prime factorization [(p1,e1),...,(p?,e?)] of the order of Zp* (=> p-1). """
 
     if not h or not g or not pf:
         raise ValueError("Inputs (h),(g),(pf) must be non-zero!")
