@@ -1,3 +1,11 @@
+''' by JDU '''
+
+# ----------------------------------------------------------------------------------------------
+
+from sage.all import *      # See Cryptography/README.md 
+
+# ----------------------------------------------------------------------------------------------
+
 def pohlig_hellman(h, g, *pf):
     """ Returns the discrete logarithm of h to base g (mod p). """
     """ h and g must be elements of Zp* (with prime p), and be given in the form of mod(p)-objects. """
@@ -36,3 +44,5 @@ def pohlig_hellman(h, g, *pf):
     
     x = crt([x_i for (x_i, pi_ei) in congr_x], [pi_ei for (x_i, pi_ei) in congr_x])
     return x
+
+# ----------------------------------------------------------------------------------------------
