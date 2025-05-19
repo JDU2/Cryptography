@@ -10,7 +10,7 @@ from sage.all import *    # See Cryptography/README.md
 def trialDivisionFactorization(n, itr):
     """ Searches for a non-trivial factor of a composite integer (n) by trial division, for up to (itr) iterations. """
     """ Characteristics: A simple optimized approach without the reliance on prime counting tools. Uses a step size of 6. """
-    """                  If a factor is found it returns the factorization based on that factor, otherwise "none". """
+    """                  If a non-trivial factor is found it returns that factor and the result of (n) divided by it, otherwise "none". """
     """ Note: If the given number of iterations (itr) is not sufficient, it prints out the the max amount of iterations """
     """       required to find a factor of (n) for the theoretical worst case, where (n) would be a perfect square of a """
     """       prime number. Additionally, it prints out the coverage level of worst case iterations (in %). """
