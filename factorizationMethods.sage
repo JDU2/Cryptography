@@ -155,6 +155,7 @@ def fermatsFactorization(n, itr = 2*10**6):
 
     # Success
     return a, b
+
 # ----------------------------------------------------------------------------------------------------
 
 def dixonsFactorization(n, B, B_fn = False):
