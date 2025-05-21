@@ -158,28 +158,19 @@ def fermatsFactorization(n, itr = 2*10**6):
 # ----------------------------------------------------------------------------------------------------
 
 def dixonsFactorization(n, B, B_fn = False):
-    """ Returns two non-trivial factors of integer (n), based on a random search with a given smoothness bound (B or B_fn), otherwise returns "None". """
-    """ From Fermat:     n = (x+y)(x-y) = x²-y² """    
-    """ Dixons's Idea:   n = (x+y)(x-y) = x²-y² = 0 (mod n) """
-    """                  Therefore, x² = y² (mod n) """
-    """                  Now, find random values x² (mod n) that are B-smooth and collect the exponent vectors (mod 2) of their prime factors over the whole factor base determined by (B). """
-    """                  Solve the system of linear equations to find combinations of exponent vectors (by vector addition) that result in a zero vector (mod 2). """
-    """                  Then, take each of these linearly dependent combinations of exponent vectors and construct a congruence of squares => x² = y² (mod n), """
-    """                  where x is constructed by multiplying their corresponding x values together (mod n) and y² is constructed by multiplying """
-    """                  their corresponding y² component values (=> x² mod n) together, then taken the square root of the product (mod n) to get y. """
-    """                  Then, check whether gcd(x-y,n) or gcd(x+y,n) results in a non-trivial factor of (n). """
-    """ Characteristics: Implementation based on the suggestions from the book "applied cryptanalysis" by Stamp and Low. """
-    """                  This implementation uses (-1) as an additional entry in the factor base and searches for modular """
-    """                  numbers between (-n/2) and (n/2), which allows finding more B-smooth numbers within the smoothness bound. """
+    """ Attempts to factor an integer (n) based on Dixon's method with smoothness bound (B or B_fn). """
+    """ Returns two non-trivial factors of n, or "None" if unsuccessful. """
+    """ Characteristics: Implementation based on suggestions from the book "Applied Cryptanalysis" by Stamp and Low. """
+    """                  Uses (-1) as an additional entry in the factor base and searches for modular """
+    """                  numbers between (-n/2) and (n/2), which allows finding more B-smooth numbers. """
     """                  (B) can be chosen manually or from a menu of functions that are dependent on (n). """
     """                  To selcect such function choose (B_fn) between [1,2,3] and set (B) to zero or "False". """
-    """ Note: The success in finding a non-trivial factor of a composite integer (n) depends on """
-    """       the amount of relations (=> B-smooth numbers x² mod n) and on the size of (B). """
+    """ Note: The success in finding a non-trivial factor of a composite integer (n) depends largely on """
+    """       the amount of collected B-smooth relations and on the size of (B) (not too small, not too large). """
     """       This implementation collects len(factor_base)+1 relations, which is the minimum amount """
-    """       that guarantees to yield at least one linear dependency (=> zero vector mod 2). """
-    """       However, in some cases all the linear dependencies are based on x and y values, """
-    """       where x+y = n and/or x = y, and both of these conditions can (but don't """
-    """       always have to) result in finding a trivial factor of (n), which returns "None". """
+    """       that guarantees to yield at least one linear dependency (=> zero vector (mod 2)). """
+    """       However, in some rare cases all the linear dependencies are based on x and y values, """
+    """       where x(+-)y = n and/or x = (+-)y, which can result in NOT finding any non-trivial factor of (n). """
 
     if not isinstance(n, (int, Integer)) or not isinstance(B, (int, Integer)):
         raise TypeError("Inputs (n, B) must be integers!")  
@@ -256,18 +247,16 @@ def dixonsFactorization(n, B, B_fn = False):
         # let exponent vectors mod 2 represent the relations
         relations.append(exponent_vector_mod_2)
 
-    M = Matrix(GF(2), len(factor_base), len(relations))
-    for i, exp_v in enumerate(relations):
-        M.set_column(i, exp_v)
+    M = Matrix(GF(2), zip(*relations)) # zip() transposes columns into rows
 
-    # solve system of linear equations
-    null_space = M.right_kernel()
-    for v in null_space.basis():
-        # construct x for congruence of squares x²=y² (mod n)
+    # solve the linear algebra
+    null_space = M.right_kernel() # solves M * v = 0 (mod 2) 
+    for v in null_space.basis(): # .basis() converts the null space into a list of vectors v
+        # construct x, for congruence of squares x²=y² (mod n)
         x = prod(x_components_candidates[i] for i in range(len(v)) if v[i] == 1) % n
-        # construct y² for congruence of squares x²=y² (mod n)
+        # construct y², for congruence of squares x²=y² (mod n)
         y2 = prod(y2_components_candidates[i] for i in range(len(v)) if v[i] == 1)
-        # get y
+        # calculate y
         y = isqrt(y2) % n
         # find non-trivial factors of n
         d = gcd(x - y, n)
