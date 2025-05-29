@@ -1,5 +1,5 @@
 ''' These are the sieves from https://github.com/JDU2/Cryptography/blob/main/somePrimeSieves.sage, '''
-''' that are now using bitarrays instead of (bit-)lists, which use less memory '''
+''' that are now using bitarrays, instead of (bit-)lists, which uses less memory. '''
 ''' by JDU '''
 
 # ---------------------------------------------------------------------------------------------------------
