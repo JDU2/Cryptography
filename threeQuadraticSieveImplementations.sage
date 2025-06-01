@@ -1,7 +1,11 @@
-''' Three Implementations of the Quadratic Sieve Factoring Algorithm, labeled 1,2,3 '''
+''' 3 implementations of the Quadratic Sieve Factoring Algorithm, labeled 1,2,3 '''
 ''' by JDU '''
 
+# ------------------------------------------------------------------------------------------------------------
 
+from sage.all import *    # See Cryptography/README.md
+
+# ------------------------------------------------------------------------------------------------------------
 
 def QS_Factorization_1(n, I_sf, B, B_fn = False):
     """ Attempts to factor an integer (n) based on the Quadratic Sieve method with smoothness bound (B or B_fn). """
@@ -124,4 +128,10 @@ def QS_Factorization_1(n, I_sf, B, B_fn = False):
             
     return None  # Factorization failed
 
-    
+# ------------------------------------------------------------------------------------------------------------
+
+
+# ------------------------------------------------------------------------------------------------------------
+
+
+# ------------------------------------------------------------------------------------------------------------
