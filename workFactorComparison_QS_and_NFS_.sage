@@ -1,4 +1,8 @@
+# ------------------------------------------------------------------------------------------------------------
 
+from sage.all import *    # See Cryptography/README.md
+
+# ------------------------------------------------------------------------------------------------------------
 
 def rsa_NFS_to_symmetric(rsa_bits):
     c = (64/9)**(1/3)
@@ -22,6 +26,8 @@ def symmetric_to_rsa_NFS(sym_bits):
     # attempts to find x for f(x)=0, within given bounds for x, where x is the RSA modulus in bits
     return ceil(find_root(f, min_x, max_x))
 
+# ------------------------------------------------------------------------------------------------------------
+
 def rsa_QS_to_symmetric(rsa_bits):
     x = rsa_bits
     # computational effort in bits (for the Quadratic Sieve on RSA), where x is the RSA modulus in bits
@@ -30,7 +36,11 @@ def rsa_QS_to_symmetric(rsa_bits):
     # then it can find a symmetric key up to a bit-size of 'ce_bits' 
     return ce_bits
 
+# ------------------------------------------------------------------------------------------------------------
+
 def compare_ce_QS_vs_NFS():
     for x in range(8,512+1,8):
         print(f"{x}-bit RSA modulus:  Computational effort in bits:  QS: {rsa_QS_to_symmetric(x)}, NFS: {rsa_NFS_to_symmetric(x)}")
     return
+
+# ------------------------------------------------------------------------------------------------------------
