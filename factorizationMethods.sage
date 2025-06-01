@@ -161,10 +161,9 @@ def fermatsFactorization(n, itr = 2*10**6):
 def dixonsFactorization(n, B, B_fn = False):
     """ Attempts to factor an integer (n) based on Dixon's method with smoothness bound (B or B_fn). """
     """ Returns two non-trivial factors of n, or "None" if unsuccessful. """
-    """ Characteristics: Implementation based on suggestions from the book "Applied Cryptanalysis" by Stamp and Low. """
-    """                  Uses (-1) as an additional entry in the factor base and searches for modular """
+    """ Characteristics: Uses (-1) as an additional entry in the factor base and searches for modular """
     """                  numbers between (-n/2) and (n/2), which allows finding more B-smooth numbers. """
-    """                  (B) can be chosen manually or from a menu of functions that are dependent on (n). """
+    """                  The smoothness bound can be chosen manually (B) or from a menu of functions of (n). """
     """                  To selcect such function choose (B_fn) between [1,2,3] and set (B) to zero or "False". """
     """ Note: The success in finding a non-trivial factor of a composite integer (n) depends largely on """
     """       the amount of collected B-smooth relations and on the size of (B) (not too small, not too large). """
@@ -177,12 +176,14 @@ def dixonsFactorization(n, B, B_fn = False):
         raise TypeError("Inputs (n, B) must be integers!")  
     if n < 4: 
         raise ValueError("Input (n) must be >= 4")   
+    if n % 2 == 0:
+        return 2, n//2
     if not B:
         # two good lower bounds for B
         if B_fn == 1: 
-            B = isqrt(sqrt(n)) # B = n^(1/4), good for n < 10^11
+            B = isqrt(sqrt(n)) # B = n^(1/4), good for n <= 10^11
         elif B_fn == 2: 
-            B = int(log(n)**2) # B = ln(n)², good for n > 10^12
+            B = int(log(n)**2) # B = ln(n)², good for n >= 10^12
         # good balanced upper bound for B
         elif B_fn == 3: 
             B = ceil(exp(sqrt(log(n)*log(log(n))/2))) # B = e^((ln(n)*ln(ln(n))/2)^(1/2))
@@ -193,13 +194,14 @@ def dixonsFactorization(n, B, B_fn = False):
     
     factor_base = [-1]+[p for p in prime_range(B+1)]
     x_components_candidates, y2_components_candidates, relations = [], [], []
-    sr = floor(sqrt(n))+1
-
-    while len(relations) < len(factor_base)+1: # this guarantees to yield at least one linear dependency
+    sr = floor(sqrt(n))
+    k = 0
+    
+    while k < len(factor_base)+1: # this guarantees to yield at least one linear dependency
 
         while True:  
             # find numbers x such that (x^2 % n) is B-smooth (=> relation)
-            x = randint(sr, n-1)
+            x = randint(sr+1, n-1)
             if x in x_components_candidates:
                 continue
             x2_mod_n = power_mod(x, 2, n)
@@ -224,6 +226,8 @@ def dixonsFactorization(n, B, B_fn = False):
                 if abs(a) == 1:
                     # new B-smooth relation found!
                     exponent_vector_mod_2 = [e % 2 for e in exponents]
+                    if exponent_vector_mod_2 not in relations:
+                        k += 1
                     break
             if abs(a) > 1:
                 # relation is not B-smooth
@@ -232,7 +236,7 @@ def dixonsFactorization(n, B, B_fn = False):
                 exponent_vector_mod_2[0] = 1
             elif sum(exponent_vector_mod_2) == 0: 
                 # check single relation
-                y = isqrt(x2_mod_n) % n
+                y = isqrt(x2_mod_n)
                 # find non-trivial factors of n
                 d = gcd(x - y, n)
                 if 1 < d < n:
@@ -254,11 +258,11 @@ def dixonsFactorization(n, B, B_fn = False):
     null_space = M.right_kernel() # solves M * v = 0 (mod 2) 
     for v in null_space.basis(): # .basis() converts the null space into a list of vectors v
         # construct x, for congruence of squares x²=y² (mod n)
-        x = prod(x_components_candidates[i] for i in range(len(v)) if v[i] == 1) % n
+        x = prod(x_components_candidates[i] for i in range(len(v)) if v[i] == 1)%n
         # construct y², for congruence of squares x²=y² (mod n)
         y2 = prod(y2_components_candidates[i] for i in range(len(v)) if v[i] == 1)
         # calculate y
-        y = isqrt(y2) % n
+        y = isqrt(y2)%n
         # find non-trivial factors of n
         d = gcd(x - y, n)
         if 1 < d < n:
