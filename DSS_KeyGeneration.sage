@@ -9,7 +9,7 @@ from sage.all import *      # See Cryptography/README.md
 
 def DSS_DSA_generate_key_pair(c):
 
-    """ Returns a random DSS(DSA) key pair based on the input value (c), which sets the bit size of the prime modulus p and prime q, which determines the security standard of the key pair. """
+    """ Returns a random DSS(DSA) key pair based on the input value (c), a menu from 1-4, which sets the bit size of the prime modulus p and prime q, which determines the security standard of the key pair. """
 
     if not isinstance(c, (int, Integer)):
         raise TypeError("Input (c) must be an integer!")   
