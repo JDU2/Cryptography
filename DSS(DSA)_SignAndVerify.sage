@@ -8,7 +8,9 @@ from sage.all import *      # See Cryptography/README.md
 # ----------------------------------------------------------------------------------------------
 
 def DSS_DSA_Sign(m, prvkey):
-    """ """
+    """ Returns a DSS(DSA) signature (r, s) based on a message (m) and a private key (prvkey). """
+    """ Use this with your own DSS(DSA) private key to digitally sign a message. """
+    """ Then send the message with the signature attached to the recipient. """
 
     (p, q, g, X) = prvkey
     
@@ -25,7 +27,8 @@ def DSS_DSA_Sign(m, prvkey):
 # ----------------------------------------------------------------------------------------------
 
 def DSS_DSA_Verify(m, sig, pubkey):
-    """ """
+    """ Verifies a DSS(DSA) signature (r, s) based on a message (m) and the senders public key (pubkey). """
+    """ Returns [True] if the signature is valid, [False] otherwise. """
     
     (p, q, g, Y) = pubkey
     (r, s) = sig
