@@ -7,7 +7,7 @@ from sage.all import *      # See Cryptography/README.md
 
 # ----------------------------------------------------------------------------------------------
 
-def DSS_sign(m, prvkey):
+def DSS_DSA_Sign(m, prvkey):
     """ """
 
     (p, q, g, X) = prvkey
@@ -24,7 +24,7 @@ def DSS_sign(m, prvkey):
 
 # ----------------------------------------------------------------------------------------------
 
-def DSS_verify(m, sig, pubkey):
+def DSS_DSA_Verify(m, sig, pubkey):
     """ """
     
     (p, q, g, Y) = pubkey
