@@ -38,7 +38,7 @@ def DSS_DSA_generate_key_pair(c):
         k = ZZ.random_element(2**(bs_p - bs_q), 2**(bs_p - (bs_q-1))) # upper bound (2nd arg) not inclusive
         p = k * q + 1 # odd number
         if (p-1) % q == 0:
-             if p.nbits() == bs_p:
+            if p.nbits() == bs_p:
                 if is_pseudoprime(p):
                     break
                     
