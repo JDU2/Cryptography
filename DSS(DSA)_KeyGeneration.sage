@@ -13,10 +13,8 @@ def DSS_DSA_generate_key_pair(c):
 
     if not isinstance(c, (int, Integer)):
         raise TypeError("Input (c) must be an integer!")   
-    if c < 1:
-        raise ValueError("Input (c) must be >= 1")
-    if c > 4:
-        raise ValueError("Input (c) must be <= 4")
+    if not 1 <= c <= 4:
+        raise ValueError("Input (c) must be within 1 <= c <= 4")
 
     if c == 1:
         bs_p=1024
@@ -36,10 +34,10 @@ def DSS_DSA_generate_key_pair(c):
     
     while True:
         k = ZZ.random_element(2**(bs_p - bs_q), 2**(bs_p - (bs_q-1))) # upper bound (2nd arg) not inclusive
-        p = k * q + 1 # odd number
+        p = k * q + 1 # plus 1 makes it an odd number
         if (p-1) % q == 0:
             if p.nbits() == bs_p:
-                if is_pseudoprime(p):
+                if is_pseudoprime(p): # flag=0 (default): performs the Baillie-PSW test, a strong combination of Miller-Rabin and Lucas test
                     break
                     
     while True:
